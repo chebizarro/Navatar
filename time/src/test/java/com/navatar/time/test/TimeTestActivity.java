@@ -4,6 +4,8 @@ package com.navatar.time.test;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.navatar.time.R;
+
 /**
  * Dummy activity used to test TimeService. Android testing requires an activity to be tested upon.
  * When testing android libraries, such as Time, an activity needs to be created in the test project
