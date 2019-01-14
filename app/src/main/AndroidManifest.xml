@@ -1,42 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	package="com.navatar"
-	android:versionCode="1"
-	android:versionName="1.0">
-
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.navatar"
+    >
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <application android:icon="@drawable/app_icon" android:label="@string/app_name" android:allowBackup="false"
-		tools:replace="android:icon">
+    <application
+        android:hardwareAccelerated="true"
+        android:allowBackup="false"
+        android:icon="@drawable/app_icon"
+        android:label="@string/appName"
+        tools:replace="android:icon"
+        android:name=".NavatarApplication">
 
-		<activity android:name="NavigationActivity" 
-		    	  android:screenOrientation="portrait" />
-		<activity android:name="NavigationSelectionActivity" 
-				  android:screenOrientation="portrait">
-	    </activity>
-	    <activity  android:name="MapSelectActivity" 
-				  android:screenOrientation="portrait">
+        <activity
+            android:name=".main.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight">
+        </activity>
+
+        <activity
+            android:name=".maps.MapsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-		
-		<service android:name=".maps.MapService"
-  				 android:icon="@drawable/app_icon"
-  				 android:label="@string/map_service_name" />
-		<service android:name="com.navatar.sensing.SensingService"
-  				 android:icon="@drawable/app_icon"
-  				 android:label="@string/sensing_service_name" />
-		
-		<receiver android:name="NavatarReceiver" >
-		    <intent-filter >
-		        <action android:name="android.bluetooth.headset.action.VENDOR_SPECIFIC_HEADSET_EVENT"/>
-		    </intent-filter>
-        </receiver>
-		
-	</application>    
+
+        <activity
+            android:name=".navigation.NavigationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight"/>
+
+        <service
+            android:name=".maps.MapService"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/map_service_name" />
+        <service
+            android:name=".sensing.SensingService"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/sensing_service_name" />
+
+    </application>
+
 </manifest>

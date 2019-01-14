@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="25dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/buttonsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:paddingBottom="25dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Number of Steps"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/viewStepCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:ems="10"
+                android:enabled="false"
+                android:longClickable="false"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/direction"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/viewDirection"
+                android:layout_width="match_parent"
+                android:layout_height="135dp"
+                android:clickable="false"
+                android:ems="10"
+                android:longClickable="false"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/reverseRouteButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/reverseRoute"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+            android:id="@+id/barcode_scanner"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_below="@id/buttonsLayout"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
