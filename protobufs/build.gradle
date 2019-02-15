@@ -3,6 +3,8 @@ apply plugin: 'com.google.protobuf'
 
 sourceSets {
     main.java.srcDirs += "${protobuf.generatedFilesBaseDir}/main/javalite"
+
+    main.proto.srcDirs += "src/main/protobuf/proto3"
 }
 
 dependencies {
