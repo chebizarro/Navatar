@@ -37,7 +37,7 @@ import com.navatar.maps.BuildingMapWrapper;
 import com.navatar.maps.MapService;
 import com.navatar.maps.particles.ParticleState;
 import com.navatar.math.Angles;
-import com.navatar.output.file.XmlFile;
+//import com.navatar.output.file.XmlFile;
 import com.navatar.particlefilter.ParticleFilter;
 import com.navatar.particlefilter.Transition;
 import com.navatar.pathplanning.AStar;
@@ -73,8 +73,8 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
 
   private AStar pathFinder = null;
 
-  private XmlFile outputPerfect = null;
-  private XmlFile xmlOutput;
+//  private XmlFile outputPerfect = null;
+//  private XmlFile xmlOutput;
 
   private ParticleFilter pf;
   private Handler handler;
@@ -166,6 +166,7 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
 
 
   private void writeXml() {
+    /*
     outputPerfect =
             new XmlFile(navatarPath + "/" + "From" + fromRoom.getName() + "To" + toRoom.getName()
                     + "FeetTraining.xml");
@@ -186,7 +187,7 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-
+    */
   }
 
   // TODO Check that works properly
@@ -215,6 +216,7 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
     // else
     // lastLandmark.objectType = Landmark.turn;
     // }
+    /*
     xmlOutput.append("    <location x=\"" + locationEstimate.getX() + "\" y=\""
         + locationEstimate.getY() + "\" floor=\"" + locationEstimate.getFloor() + "\" compass=\""
         + locationEstimate.getDirection() + "\" steps=\"" + stepCounter + "\" landmark=\""
@@ -233,7 +235,7 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
     } catch (IOException e1) {
       // TODO Auto-generated catch block
       e1.printStackTrace();
-    }
+    }*/
     tts.speak(navigationCommand, TextToSpeech.QUEUE_ADD, null);
     if (navigationCommand.equalsIgnoreCase("You have reached your destination")) {
       try {
@@ -256,12 +258,6 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
   };
 
   public void onStop() {
-    outputPerfect.append("</rawData>\r\n");
-    try {
-      outputPerfect.writeFile(true);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
     tts.shutdown();
     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     super.onStop();
@@ -271,22 +267,6 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
     super.onDestroy();
     if(mapService!=null)
       unbindService(mapConnection);
-
-    xmlOutput.append("</locations>");
-    pf.finalize();
-    try {
-      xmlOutput.writeFile(true);
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    outputPerfect.append("</rawData>\r\n");
-    try {
-      outputPerfect.writeFile(true);
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
     tts.shutdown();
     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
   }
@@ -311,22 +291,25 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
         pathFinder.findPath(locationEstimate, null, endState, toRoom);
         // TODO(ilapost): Complete code here.
         tts.speak(navigationCommand, TextToSpeech.QUEUE_ADD, null);
+        /*
         xmlOutput.append("    <location x=\"" + locationEstimate.getX() + "\" y=\""
             + locationEstimate.getY() + "\" floor=\"" + locationEstimate.getFloor()
             + "\" compass=\"" + locationEstimate.getDirection() + "\" steps=\"" + stepCounter
             + "\" landmark=\"" + lastStep.getlandmark().getType() + "\" command=\""
             + navigationCommand + "\" isLeft=\"" + lastStep.isFollowLeft() + "\" />\n");
+           */
         runOnUiThread(new Runnable() {
           public void run() {
             viewDirection.setText(navigationCommand);
           }
         });
-
+/*
         try {
           xmlOutput.writeFile(true);
         } catch (IOException e) {
           e.printStackTrace();
         }
+*/
       }
     }
 
@@ -398,11 +381,12 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
 
         navigationCommand = getNextDirection();
         lastStep = path.getStep(pathIndex);
-
+/*
         xmlOutput.append("    <location x=\"" + startState.getX() + "\" y=\"" + startState.getY()
             + "\" compass=\"" + orientation + "\" steps=\"" + stepCounter + "\" landmark=\""
             + lastStep.getlandmark().getType() + "\" command=\"" + navigationCommand
             + "\" isLeft=\"" + lastStep.isFollowLeft() + "\" />\n");
+            */
       } else {
         navigationCommand = "No path found.";
       }
@@ -413,11 +397,6 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
         }
       });
 
-      try {
-        xmlOutput.writeFile(true);
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
 
       if (navigationCommand.equalsIgnoreCase("You have reached your destination.")) {
         reverseRouteButton.setVisibility(View.VISIBLE);

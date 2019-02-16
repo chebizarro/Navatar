@@ -90,7 +90,6 @@ dependencies {
     implementation project(':protobufs')
     implementation project(':math')
     implementation project(':maps')
-    implementation project(':output')
     implementation project(':sensingservices')
     implementation project(':particlefilter')
     implementation project(':pathplanning')

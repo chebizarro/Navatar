@@ -6,7 +6,6 @@ dependencies {
     implementation project(':protobufs')
     implementation project(':maps')
     implementation project(':math')
-    implementation project(':output')
     implementation 'com.google.protobuf:protobuf-lite:3.0.1'
 
 }

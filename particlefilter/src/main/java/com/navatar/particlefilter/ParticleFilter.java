@@ -15,8 +15,6 @@ import com.navatar.maps.particles.ParticleState;
 import com.navatar.math.Angles;
 import com.navatar.math.Constants;
 import com.navatar.math.Distance;
-import com.navatar.output.file.TextFile;
-import com.navatar.output.file.XmlFile;
 
 import com.navatar.protobufs.LandmarkProto.Landmark;
 import com.navatar.protobufs.LandmarkProto.Landmark.LandmarkType;
@@ -34,9 +32,6 @@ public class ParticleFilter {
     private int run;
     private float staticStepV = (float) 0.1;
     private boolean printData = false, printEstimation = true;
-
-    private XmlFile xml;
-    private TextFile logs;
 
     private LinkedList<Transition> transitions;
     private Particle[][] particles;
@@ -153,6 +148,7 @@ public class ParticleFilter {
 
                 // locationEstimation = kmeans.greatestCluster(particles);
 
+                /*
                 if (printData) {
                     xml.append(" <step time=\"" + currTime + "\">\n");
                     for (i = 0; i < NUM_OF_PARTICLE_FILTERS; ++i) {
@@ -179,6 +175,7 @@ public class ParticleFilter {
                     xml.append(" </step>\n");
                     xml.writeFile(true);
                 }
+                */
             }
         }
     }
@@ -286,8 +283,8 @@ public class ParticleFilter {
         for (l = 0; l < NUM_OF_PARTICLE_FILTERS; ++l) {
             // If all particle filters are dead reset them
             if (bestPFindex == -1) {
-                logs.append("\nAll particles died!!!\nType of landmark: " + type);
-                logs.writeFile(true);
+                //logs.append("\nAll particles died!!!\nType of landmark: " + type);
+                //logs.writeFile(true);
                 for (i = 0; i < NUM_OF_PARTICLES_PER_PF; ++i) {
                     currState = particles[l][i].getLastState();
                     if (!map.isAccessible(currState))
@@ -320,8 +317,8 @@ public class ParticleFilter {
             }
             // If the current particle filter is dead resample with the best one
             else if (weights[l] < 0.0001) {
-                logs.append("\nParticle filter with step " + stepM[l] + " died!!!\n");
-                logs.writeFile(true);
+                //logs.append("\nParticle filter with step " + stepM[l] + " died!!!\n");
+                //logs.writeFile(true);
                 for (i = 0; i < NUM_OF_PARTICLES_PER_PF; ++i)
                     particles[bestPFindex][i].copyTo(particles[l][i]);
                 stepM[l] = stepM[bestPFindex] + (float) rand.nextGaussian() * stepMeanDiff;
@@ -343,8 +340,8 @@ public class ParticleFilter {
             float currMean = stepMean;
             for (i = 0; i < NUM_OF_PARTICLE_FILTERS; ++i, currMean += 3 * stepMeanDiff)
                 stepM[i] = currMean;
-            logs.append("\n");
-            logs.writeFile(true);
+            //logs.append("\n");
+            //logs.writeFile(true);
         }
     }
 
