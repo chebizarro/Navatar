@@ -88,7 +88,6 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     implementation project(':protobufs')
-    implementation project(':time')
     implementation project(':math')
     implementation project(':maps')
     implementation project(':output')
