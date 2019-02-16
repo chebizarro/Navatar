@@ -1,7 +1,7 @@
 package com.navatar.di;
 
 import android.app.Application;
-import com.navatar.NavatarApplication;
+import com.navatar.ReferencePointApplication;
 import com.navatar.data.source.MapsRepository;
 import com.navatar.data.source.MapsRepositoryModule;
 import com.navatar.data.source.RoutesRepository;
@@ -15,12 +15,12 @@ import dagger.android.support.AndroidSupportInjectionModule;
 import javax.inject.Singleton;
 
 /**
- * This is a Dagger component. Refer to {@link NavatarApplication} for the list of Dagger components
+ * This is a Dagger component. Refer to {@link ReferencePointApplication} for the list of Dagger components
  * used in this application.
  * <p>
  * Even though Dagger allows annotating a {@link Component} as a singleton, the code
  * itself must ensure only one instance of the class is created. This is done in {@link
- * NavatarApplication}.
+ * ReferencePointApplication}.
  * //{@link AndroidSupportInjectionModule}
  * // is the module from Dagger.Android that helps with the generation
  * // and location of subcomponents.
@@ -33,7 +33,7 @@ import javax.inject.Singleton;
         ApplicationModule.class,
         ActivityBindingModule.class,
         AndroidSupportInjectionModule.class})
-public interface AppComponent extends AndroidInjector<NavatarApplication> {
+public interface AppComponent extends AndroidInjector<ReferencePointApplication> {
 
     MapsRepository getMapsRepository();
 

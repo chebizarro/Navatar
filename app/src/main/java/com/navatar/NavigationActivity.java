@@ -536,12 +536,12 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
       //TODO: commented by manju since it was freezing UI during step counting
 
       // it must be automatic and every 3 step <- we probably need to adjust it after some testing
-   /* if (isAutomatic && !hasChecked && (stepCounter % 3 == 2)) {
+   if (isAutomatic && !hasChecked && (stepCounter % 3 == 2)) {
         Thread execPathCorrection = new ExecutePathCorrection();
         execPathCorrection.setPriority(Thread.MAX_PRIORITY);
         handler.post(execPathCorrection);
         hasChecked = true;
-      }*/
+      }
     }
   }
 

@@ -1,7 +1,5 @@
 package com.navatar.common;
 
-import android.support.annotation.NonNull;
-
 public final class SensorData {
 
     public enum SensorType {
