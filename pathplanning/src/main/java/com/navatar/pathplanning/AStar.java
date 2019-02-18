@@ -9,7 +9,6 @@ import com.navatar.maps.particles.ParticleState;
 import com.navatar.math.Distance;
 import com.navatar.protobufs.LandmarkProto.Landmark;
 import com.navatar.protobufs.LandmarkProto.Landmark.LandmarkType;
-import com.sun.istack.internal.NotNull;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -65,7 +64,7 @@ public class AStar {
         /**
          * @see Comparable#compareTo(Object)
          */
-        public int compareTo(@NotNull Node other) {
+        public int compareTo(Node other) {
             double f = h + g;
             double of = other.h + other.g;
             if (f < of)
