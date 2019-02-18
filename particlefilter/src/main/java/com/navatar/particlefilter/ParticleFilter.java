@@ -107,7 +107,7 @@ public class ParticleFilter {
     }
 
     public void execute() throws IOException {
-        Vector<Transition> currTransitions = new Vector<Transition>();
+        Vector<Transition> currTransitions = new Vector<>();
         Transition currTransition = null, integratedTransition;
         ParticleState newState;
         long currTime;

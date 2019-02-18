@@ -9,6 +9,7 @@ import com.navatar.maps.particles.ParticleState;
 import com.navatar.math.Distance;
 import com.navatar.protobufs.LandmarkProto.Landmark;
 import com.navatar.protobufs.LandmarkProto.Landmark.LandmarkType;
+import com.sun.istack.internal.NotNull;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -64,7 +65,7 @@ public class AStar {
         /**
          * @see Comparable#compareTo(Object)
          */
-        public int compareTo(Node other) {
+        public int compareTo(@NotNull Node other) {
             double f = h + g;
             double of = other.h + other.g;
             if (f < of)
@@ -78,9 +79,9 @@ public class AStar {
 
     public Path findPath(ParticleState startState, Landmark start, ParticleState endState,
                          Landmark goal) {
-        Map<Landmark, Node> closed = new HashMap<Landmark, Node>();
-        Map<Landmark, Node> openMap = new HashMap<Landmark, Node>();
-        PriorityQueue<Node> openQueue = new PriorityQueue<Node>();
+        Map<Landmark, Node> closed = new HashMap<>();
+        Map<Landmark, Node> openMap = new HashMap<>();
+        PriorityQueue<Node> openQueue = new PriorityQueue<>();
         Node startNode = new Node(startState, start);
         startNode.g = 0;
         startNode.cameFrom = null;

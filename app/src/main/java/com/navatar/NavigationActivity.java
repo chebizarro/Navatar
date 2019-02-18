@@ -37,7 +37,6 @@ import com.navatar.maps.BuildingMapWrapper;
 import com.navatar.maps.MapService;
 import com.navatar.maps.particles.ParticleState;
 import com.navatar.math.Angles;
-//import com.navatar.output.file.XmlFile;
 import com.navatar.particlefilter.ParticleFilter;
 import com.navatar.particlefilter.Transition;
 import com.navatar.pathplanning.AStar;
@@ -72,9 +71,6 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
   private ParticleState startState, endState;
 
   private AStar pathFinder = null;
-
-//  private XmlFile outputPerfect = null;
-//  private XmlFile xmlOutput;
 
   private ParticleFilter pf;
   private Handler handler;
@@ -141,8 +137,6 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
    // viewUserName.setText(userName);
     //viewStepLength.setText(String.valueOf(stepLength));
 
-    writeXml();
-
     handler = new Handler();
 
     // Start and bind with sensing service
@@ -164,31 +158,6 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
     return inputHandler.onTouchEvent(event);
   }
 
-
-  private void writeXml() {
-    /*
-    outputPerfect =
-            new XmlFile(navatarPath + "/" + "From" + fromRoom.getName() + "To" + toRoom.getName()
-                    + "FeetTraining.xml");
-    outputPerfect.append("<rawData navigationFromTo=\"" + fromRoom.getName() + toRoom.getName() + "\" stepLength=\""
-            + "\">\r\n");
-
-    File dir = new File(navatarPath + "/Particles");
-    if (!dir.exists())
-      dir.mkdir();
-    Log.i("XmlFile", "logging in");
-    xmlOutput =
-            new XmlFile(navatarPath + "/Particles/" + fromRoom.getName() + "_" + toRoom.getName()
-                    + "_position.xml");
-    xmlOutput.append("<locations>\n");
-    try {
-      xmlOutput.writeFile(false);
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    */
-  }
 
   // TODO Check that works properly
   private void landmarkConfirmed(long timestamp) {
@@ -228,14 +197,7 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
         viewDirection.setText(navigationCommand);
       }
     });
-
-
-    try {
-      xmlOutput.writeFile(true);
-    } catch (IOException e1) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
-    }*/
+  */
     tts.speak(navigationCommand, TextToSpeech.QUEUE_ADD, null);
     if (navigationCommand.equalsIgnoreCase("You have reached your destination")) {
       try {
@@ -303,13 +265,7 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
             viewDirection.setText(navigationCommand);
           }
         });
-/*
-        try {
-          xmlOutput.writeFile(true);
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-*/
+
       }
     }
 
@@ -363,12 +319,6 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
 
       Log.i("Navigation Activity", "Map service connected");
 
-      try {
-        writeNavHistory();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-
       startState = map.getRoomLocation(fromRoom.getName());
       pf = new ParticleFilter(mapService.getActiveMap(), startState);
       endState = map.getRoomLocation(toRoom.getName());
@@ -413,36 +363,6 @@ public class NavigationActivity extends DaggerAppCompatActivity implements Navat
     }
   };
 
-  private void writeNavHistory() throws IOException {
-    FileWriter file = null;
-
-    try {
-      JSONObject entry = null;
-      try {
-        entry = new JSONObject();
-        Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
-        entry.put("time", dateFormat.format(date));
-        entry.put("campus", mapService.getCampusName());
-        entry.put("building", map.getName());
-        entry.put("start_room", fromRoom.getName());
-        entry.put("end_room", toRoom.getName());
-      } catch (JSONException e) {
-        Log.e("Exception", "Could not create json object for nav history");
-      }
-
-      String storagePath = Environment.getExternalStorageDirectory().getPath() + "/Navatar";
-      File directories = new File(storagePath);
-      directories.mkdirs();
-      file = new FileWriter(storagePath + "/nav_history.json", true);
-      file.write(entry.toString() + "\n");
-    } catch (IOException e) {
-      Log.e("Exception", "File write failed: " + e.toString());
-    } finally {
-      file.flush();
-      file.close();
-    }
-  }
 
   public void reverseRoute(View view) {
     finish();

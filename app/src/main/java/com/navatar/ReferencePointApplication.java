@@ -19,8 +19,8 @@ public class ReferencePointApplication extends DaggerApplication {
     }
 
     /**
-     * Our Espresso tests need to be able to get an instance of the {@link TasksRepository}
-     * so that we can delete all tasks before running each test
+     * Our Espresso tests need to be able to get an instance of the {@link MapsRepository}
+     * so that we can delete all maps before running each test
      */
     @VisibleForTesting
     public MapsRepository getMapRepository() {
