@@ -1,1 +1,1 @@
-include ':app', ':protobufs', ':sensingservices', ':math', ':maps', ':particlefilter', ':pathplanning'
+include ':app', ':protobufs', ':sensingservices', ':navatar'

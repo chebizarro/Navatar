@@ -20,7 +20,7 @@ public class ReferencePointApplication extends DaggerApplication {
 
     /**
      * Our Espresso tests need to be able to get an instance of the {@link MapsRepository}
-     * so that we can delete all maps before running each test
+     * so that we can delete all maps before running each com.navatar.math.test
      */
     @VisibleForTesting
     public MapsRepository getMapRepository() {

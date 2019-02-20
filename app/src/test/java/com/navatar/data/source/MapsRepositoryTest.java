@@ -50,10 +50,10 @@ public class MapsRepositoryTest {
     @Before
     public void setupMapsRepository() {
         // Mockito has a very convenient way to inject mocks by using the @Mock annotation. To
-        // inject the mocks in the test the initMocks method needs to be called.
+        // inject the mocks in the com.navatar.math.test the initMocks method needs to be called.
         MockitoAnnotations.initMocks(this);
 
-        // Get a reference to the class under test
+        // Get a reference to the class under com.navatar.math.test
         mMapsRepository = new MapsRepository(
                 mMapsRemoteDataSource, mMapsLocalDataSource);
 
