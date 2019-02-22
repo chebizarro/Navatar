@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
+import com.navatar.maps.Building;
 
 import java.util.ArrayList;
 import java.util.List;

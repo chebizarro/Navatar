@@ -4,8 +4,6 @@ import android.support.annotation.Nullable;
 
 import com.navatar.BasePresenter;
 import com.navatar.BaseView;
-import com.navatar.data.Building;
-import com.navatar.data.Landmark;
 import com.navatar.data.Map;
 import com.navatar.data.Route;
 import com.navatar.pathplanning.Step;

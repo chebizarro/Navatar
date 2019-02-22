@@ -1,7 +1,7 @@
 package com.navatar.pathplanning;
 
 import com.navatar.maps.particles.ParticleState;
-import com.navatar.protobufs.LandmarkProto.Landmark;
+import com.navatar.maps.Landmark;
 
 /**
  * A single step within the path
@@ -69,7 +69,7 @@ public class Step {
      */
     public int hashCode() {
         int hash = 17;
-        hash = 31 * hash + this.getlandmark().getLocation().hashCode();
+        hash = 31 * hash + this.getlandmark().hashCode();
         return hash;
     }
 

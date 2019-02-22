@@ -1,6 +1,5 @@
 package com.navatar.location.details;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -12,8 +11,8 @@ import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.DefaultDecoderFactory;
-import com.navatar.data.Building;
-import com.navatar.data.Landmark;
+import com.navatar.maps.Building;
+import com.navatar.maps.Landmark;
 import com.navatar.data.Map;
 import com.navatar.data.source.LandmarkProvider;
 import com.navatar.data.source.MapsRepository;

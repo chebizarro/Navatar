@@ -5,7 +5,6 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
-import com.navatar.data.Route;
 import com.navatar.data.source.RouteData;
 
 import io.reactivex.Flowable;

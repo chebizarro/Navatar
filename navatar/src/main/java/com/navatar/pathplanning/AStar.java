@@ -3,11 +3,11 @@
  **/
 package com.navatar.pathplanning;
 
-import com.navatar.maps.BuildingMapWrapper;
-import com.navatar.maps.LandmarkWrapper;
+import com.navatar.maps.Building;
+import com.navatar.maps.Landmark;
 import com.navatar.maps.particles.ParticleState;
 import com.navatar.math.Distance;
-import com.navatar.protobufs.LandmarkProto.Landmark;
+//import com.navatar.protobufs.LandmarkProto.Landmark;
 import com.navatar.protobufs.LandmarkProto.Landmark.LandmarkType;
 
 import java.util.HashMap;
@@ -20,9 +20,9 @@ import java.util.Stack;
 /** Implements the A* algorithm for finding the optimum path in a 2D space. **/
 public class AStar {
     /** The map of the environment to search for a path. **/
-    private BuildingMapWrapper map;
+    private Building map;
 
-    public AStar(BuildingMapWrapper map) {
+    public AStar(Building map) {
         this.map = map;
     }
 
@@ -137,13 +137,13 @@ public class AStar {
      */
     private LinkedList<Node> neighbors(Node node) {
         LinkedList<Node> neighbors = new LinkedList<Node>();
-        Map<LandmarkType, List<LandmarkWrapper>> landmarks = map.getLandmarks(node.state);
-        for (List<LandmarkWrapper> landmarkGroup : landmarks.values()) {
-            for (LandmarkWrapper landmark : landmarkGroup) {
+        Map<LandmarkType, List<Landmark>> landmarks = map.getLandmarks(node.state);
+        for (List<Landmark> landmarkGroup : landmarks.values()) {
+            for (Landmark landmark : landmarkGroup) {
                 Node neighbor = new Node(
-                        new ParticleState(0, landmark.getLandmark().getLocation().getX(),
-                                landmark.getLandmark().getLocation().getY(), node.state.getFloor()),
-                        landmark.getLandmark());
+                        new ParticleState(0, landmark.getX(),
+                                landmark.getY(), node.state.getFloor()),
+                        landmark);
                 neighbors.add(neighbor);
             }
         }

@@ -3,8 +3,6 @@ package com.navatar.maps;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.navatar.data.Building;
-import com.navatar.data.Landmark;
 import com.navatar.data.Map;
 import com.navatar.data.Route;
 import com.navatar.data.source.LandmarkProvider;

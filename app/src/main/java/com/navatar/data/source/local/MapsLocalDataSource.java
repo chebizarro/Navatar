@@ -5,7 +5,7 @@ import android.content.res.AssetManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.navatar.data.Building;
+import com.navatar.maps.Building;
 import com.navatar.data.Map;
 import com.navatar.data.source.MapsDataSource;
 import com.navatar.location.model.Geofence;

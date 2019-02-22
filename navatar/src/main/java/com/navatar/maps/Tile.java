@@ -1,7 +1,7 @@
 /**
  * Contains the class TileWrapper which is a wrapper for the Tile protobuf.
  */
-package com.navatar.data;
+package com.navatar.maps;
 
 import com.navatar.math.Distance;
 import com.navatar.protobufs.CoordinatesProto.Coordinates;

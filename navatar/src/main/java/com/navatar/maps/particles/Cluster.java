@@ -24,7 +24,7 @@ public class Cluster<T extends State> implements Comparable<Cluster<T>> {
   private T farthestState;
 
   public Cluster() {
-    this.states = new Vector<T>();
+    this.states = new Vector<>();
     mean = null;
     radius = 0.0;
     converged = false;
@@ -37,7 +37,7 @@ public class Cluster<T extends State> implements Comparable<Cluster<T>> {
    *          The mean value of the cluster.
    */
   public Cluster(T mean) {
-    this.states = new Vector<T>();
+    this.states = new Vector<>();
     this.mean = mean;
     this.radius = 0.0;
     this.converged = false;

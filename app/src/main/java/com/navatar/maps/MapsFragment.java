@@ -2,41 +2,28 @@ package com.navatar.maps;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.ResultPoint;
-import com.google.zxing.client.android.BeepManager;
-import com.journeyapps.barcodescanner.BarcodeCallback;
-import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 import com.navatar.common.TextToSpeechProvider;
+import com.navatar.data.Map;
+import com.navatar.data.Route;
 import com.navatar.location.details.QRCodeScanner;
 import com.navatar.navigation.NavigationActivity;
 import com.navatar.R;
-import com.navatar.data.Building;
-import com.navatar.data.Landmark;
-import com.navatar.data.Map;
-import com.navatar.data.Route;
 import com.navatar.di.ActivityScoped;
 import com.navatar.pathplanning.Step;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 

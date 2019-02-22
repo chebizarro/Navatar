@@ -32,12 +32,12 @@ public class Direction {
         Landmark closestLandmark;
         String side = "";
         int stepIndex = -1;
-        Vector<Landmark> landmarkList = new Vector<Landmark>();
+        Vector<Landmark> landmarkList = new Vector<>();
         double cx, cy, ncx, ncy;
         while ((currentStep = path.getStep(++stepIndex)) != null) {
 
             side = sideToFollow(path, stepIndex); // the side to follow based on the next step
-            if (side == "left ")
+            if (side.equalsIgnoreCase("left "))
                 currentStep.setFollowLeft(true);
             else
                 currentStep.setFollowLeft(false);
@@ -46,7 +46,7 @@ public class Direction {
                 currentStep.setDirectionString("You have reached your destination.");
                 break;
             }
-            closestLandmark = currentStep.getlandmark();
+            closestLandmark = currentStep.getlandmark().getLandmark();
             nextStep = path.getStep(stepIndex + 1);
 
             /* Generate a list of landmarks between the current and the next step */
@@ -96,7 +96,7 @@ public class Direction {
              * same type as next step if they are on the same side as you go from next step.
              */
             double angle;
-            while (counter < dist && !compareLandMark(closestLandmark, nextStep.getlandmark())) {
+            while (counter < dist && !compareLandMark(closestLandmark, nextStep.getlandmark().getLandmark())) {
                 cx += x_offset;
                 cy += y_offset;
                 landmarkIndex = findClosestLandmarks(landmarks, nextStep.getlandmark().getType(), cx, cy);

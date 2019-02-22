@@ -27,7 +27,7 @@ public class MapsRepository implements MapsDataSource {
 
     @VisibleForTesting
     @Nullable
-    java.util.Map<String, com.navatar.data.Map> mCachedMaps;
+    java.util.Map<String, Map> mCachedMaps;
 
     @VisibleForTesting
     @Nullable
@@ -58,7 +58,7 @@ public class MapsRepository implements MapsDataSource {
     }
 
     @Override
-    public Flowable<List<com.navatar.data.Map>> getMaps() {
+    public Flowable<List<Map>> getMaps() {
         // Respond immediately with cache if available and not dirty
         if (mCachedMaps != null && !mCacheIsDirty) {
             return Flowable.fromIterable(mCachedMaps.values()).toList().toFlowable();
@@ -66,13 +66,13 @@ public class MapsRepository implements MapsDataSource {
             mCachedMaps = new LinkedHashMap<>();
         }
 
-        Flowable<List<com.navatar.data.Map>> remoteTasks = getAndSaveRemoteMaps();
+        Flowable<List<Map>> remoteTasks = getAndSaveRemoteMaps();
 
         if (mCacheIsDirty) {
             return remoteTasks;
         } else {
             // Query the local storage if available. If not, query the network.
-            Flowable<List<com.navatar.data.Map>> localMaps = getAndCacheLocalMaps();
+            Flowable<List<Map>> localMaps = getAndCacheLocalMaps();
             return Flowable.concat(localMaps, remoteTasks)
                     .filter(maps -> !maps.isEmpty())
                     .firstOrError()

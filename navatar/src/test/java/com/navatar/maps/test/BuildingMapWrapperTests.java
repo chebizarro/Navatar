@@ -1,6 +1,6 @@
 package com.navatar.maps.test;
 
-import com.navatar.maps.BuildingMapWrapper;
+import com.navatar.maps.Building;
 import com.navatar.maps.particles.ParticleState;
 import com.navatar.protobufs.BuildingMapProto;
 
@@ -15,7 +15,7 @@ public class BuildingMapWrapperTests extends TestCase {
 
         try {
             BuildingMapProto.BuildingMap map = BuildingMapProto.BuildingMap.parseFrom(classLoader.getResourceAsStream("test.pb"));
-            BuildingMapWrapper wrapper = new BuildingMapWrapper(map);
+            Building wrapper = new Building(map);
 
             assertNotNull(wrapper);
 
@@ -30,7 +30,7 @@ public class BuildingMapWrapperTests extends TestCase {
 
         try {
             BuildingMapProto.BuildingMap map = BuildingMapProto.BuildingMap.parseFrom(classLoader.getResourceAsStream("test.pb"));
-            BuildingMapWrapper wrapper = new BuildingMapWrapper(map);
+            Building wrapper = new Building(map);
 
             ParticleState state = wrapper.getRoomLocation("401");
 

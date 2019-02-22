@@ -13,7 +13,7 @@ public class Particle implements Cloneable {
   public static Particle newInstance() {
     Particle instance = new Particle();
     instance.numOfStates = Integer.MAX_VALUE;
-    instance.path = new Vector<ParticleState>();
+    instance.path = new Vector<>();
     instance.size = 0;
     instance.index = -1;
     instance.weight = 1;
@@ -22,7 +22,7 @@ public class Particle implements Cloneable {
 
   public static Particle newInstance(ParticleState initialState, int numOfStates) {
     Particle instance = new Particle();
-    instance.path = new Vector<ParticleState>();
+    instance.path = new Vector<>();
     instance.path.add(initialState);
     if (numOfStates < 1)
       numOfStates = Integer.MAX_VALUE;
@@ -109,7 +109,7 @@ public class Particle implements Cloneable {
     cloneP.weight = this.weight;
     cloneP.size = this.size;
     cloneP.index = this.index;
-    cloneP.path = new Vector<ParticleState>();
+    cloneP.path = new Vector<>();
     for (ParticleState state : path)
       cloneP.path.add(state.clone());
     return cloneP;

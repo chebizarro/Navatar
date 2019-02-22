@@ -1,4 +1,4 @@
-package com.navatar.data;
+package com.navatar.maps;
 
 import com.navatar.math.Constants;
 import com.navatar.protobufs.LandmarkProto;
@@ -71,6 +71,18 @@ public class Landmark implements Comparable<Landmark> {
 
     public String getName() {
         return getLandmark().getName();
+    }
+
+    public double getX() {
+        return landmark.getLocation().getX();
+    }
+
+    public double getY() {
+        return landmark.getLocation().getY();
+    }
+
+    public LandmarkProto.Landmark.LandmarkType getType() {
+        return landmark.getType();
     }
 
 }

@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.navatar.data.source.RouteData;
+import com.navatar.maps.Building;
+import com.navatar.maps.Landmark;
 import com.navatar.pathplanning.Path;
 
 import java.text.DateFormat;

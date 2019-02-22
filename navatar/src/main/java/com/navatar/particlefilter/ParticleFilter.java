@@ -1,6 +1,6 @@
 package com.navatar.particlefilter;
 
-import com.navatar.maps.BuildingMapWrapper;
+import com.navatar.maps.Building;
 import com.navatar.maps.particles.Cluster;
 import com.navatar.maps.particles.KMeans;
 import com.navatar.maps.particles.Particle;
@@ -34,7 +34,7 @@ public class ParticleFilter {
 
     private LinkedList<Transition> transitions;
     private Particle[][] particles;
-    private BuildingMapWrapper map;
+    private Building map;
     private static Random rand;
     private float[] stepM;
 
@@ -46,11 +46,9 @@ public class ParticleFilter {
     private float stepMean;
     private float stepMeanDiff;
 
-    private String groundTruthFile;
-
-    public ParticleFilter(BuildingMapWrapper map, ParticleState startingState) {
+    public ParticleFilter(Building map, ParticleState startingState) {
         rand = new Random();
-        this.transitions = new LinkedList<Transition>();
+        this.transitions = new LinkedList<>();
         this.map = map;
         this.particles = new Particle[NUM_OF_PARTICLE_FILTERS][NUM_OF_PARTICLES_PER_PF];
         this.stepM = new float[NUM_OF_PARTICLE_FILTERS];
@@ -259,7 +257,7 @@ public class ParticleFilter {
         return 0.0;
     }
 
-    private void sampling(LandmarkType type) throws IOException {
+    private void sampling(LandmarkType type) {
         ParticleState currState, newState, oldState;
         com.navatar.protobufs.LandmarkProto.Landmark closestLandmark;
         double selection;

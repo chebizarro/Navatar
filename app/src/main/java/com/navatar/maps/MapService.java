@@ -3,9 +3,7 @@ package com.navatar.maps;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.navatar.MapSelectActivity;
 import com.navatar.maps.particles.ParticleState;
-import com.navatar.pathplanning.Path;
 import java.io.InputStream;
 import com.navatar.protobufs.BuildingMapProto;
 
@@ -16,19 +14,16 @@ import android.os.Binder;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.navatar.maps.BuildingMapWrapper;
 
 public class MapService extends Service {
   private String navatarPath = Environment.getExternalStorageDirectory().getPath() + "/Navatar";
   private String campusName;
   private final IBinder binder = new MapBinder();
-  private ArrayList<BuildingMapWrapper> maps;
-  private BuildingMapWrapper activeMap;
+  private ArrayList<Building> maps;
+  private Building activeMap;
   private PendingIntent pendingIntent;
 
   // Auto-locate
@@ -37,7 +32,7 @@ public class MapService extends Service {
 
   @Override
   public void onCreate() {
-      maps = new ArrayList<BuildingMapWrapper>();
+      maps = new ArrayList<>();
   }
 
   private void loadBuildingGeofencesJSONFromPath() {
@@ -70,7 +65,7 @@ public class MapService extends Service {
           for (int i = 0; i<mapFiles.length; i++) {
             // Ignore building geofences file
             if ( !mapFiles[i].equals(BUILDING_GEOFENCES_JSON_FILENAME)) {
-              maps.add(new BuildingMapWrapper(BuildingMapProto.BuildingMap.parseFrom(
+              maps.add(new Building(BuildingMapProto.BuildingMap.parseFrom(
                       getAssets().open(navatarPath + "/" + mapFiles[i]))));
             }
           }
@@ -95,7 +90,7 @@ public class MapService extends Service {
             try {
                 Intent mapListSendbackIntent = new Intent();
                 ArrayList<String> mapList = new ArrayList<>();
-                for (BuildingMapWrapper map : maps) {
+                for (Building map : maps) {
                     mapList.add(map.getName().replaceAll("_"," "));
                 }
 
@@ -134,7 +129,7 @@ public class MapService extends Service {
   public void onDestroy(){
 
   }
-  public ArrayList<BuildingMapWrapper> maps() {
+  public ArrayList<Building> maps() {
     return maps;
   }
 
@@ -142,7 +137,7 @@ public class MapService extends Service {
     activeMap = maps.get(position);
   }
 
-  public BuildingMapWrapper getActiveMap() {
+  public Building getActiveMap() {
     return activeMap;
   }
 
@@ -159,7 +154,7 @@ public class MapService extends Service {
   }
 
   public void debugMapNames() {
-    for (BuildingMapWrapper map : maps) {
+    for (Building map : maps) {
         Log.d("MAP NAME:", map.getName());
     }
   }
@@ -168,16 +163,16 @@ public class MapService extends Service {
     return activeMap.getRoomLocation(room);
   }
 
-  private BuildingMapWrapper findMapFromRoom(String room) {
-    for (BuildingMapWrapper map : maps) {
+  private Building findMapFromRoom(String room) {
+    for (Building map : maps) {
       if (map.getRoomLocation(room) != null)
         return map;
     }
     return null;
   }
 
-  private BuildingMapWrapper findMapByName(String buildingName) {
-    for (BuildingMapWrapper map : maps) {
+  private Building findMapByName(String buildingName) {
+    for (Building map : maps) {
         if (map.getName().equals(buildingName)){
             Log.d("ACTIVE MAP FOUND BY NAME : ", map.getName());
             return map;

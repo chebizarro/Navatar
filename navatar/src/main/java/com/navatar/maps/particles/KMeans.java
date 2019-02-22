@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.Vector;
 
 public class KMeans<T extends State> {
-  // TODO(ilapost): Consider passing these constants as parameters to the KMeans constructor.
+
   private double maxDiameter;
   private double convergenceThreshold;
   private Vector<Cluster<T>> clusters;

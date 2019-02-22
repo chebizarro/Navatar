@@ -1,6 +1,6 @@
 package com.navatar.data.source;
 
-import com.navatar.data.Landmark;
+import com.navatar.maps.Landmark;
 
 import io.reactivex.Flowable;
 
