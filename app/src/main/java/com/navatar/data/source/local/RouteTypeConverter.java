@@ -5,7 +5,7 @@ import android.arch.persistence.room.TypeConverter;
 
 import com.navatar.maps.Building;
 import com.navatar.maps.Landmark;
-import com.navatar.data.Map;
+import com.navatar.maps.Map;
 
 public class RouteTypeConverter {
 

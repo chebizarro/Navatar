@@ -3,7 +3,7 @@ package com.navatar.data.source;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.navatar.data.Route;
+import com.navatar.maps.Route;
 
 import io.reactivex.Flowable;
 

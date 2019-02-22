@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.navatar.maps.Building;
-import com.navatar.data.Map;
+import com.navatar.maps.Map;
 import com.navatar.data.source.MapsDataSource;
 import com.navatar.location.model.Geofence;
 import com.navatar.location.model.Point;

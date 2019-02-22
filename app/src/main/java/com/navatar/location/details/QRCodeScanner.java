@@ -13,7 +13,7 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 import com.navatar.maps.Building;
 import com.navatar.maps.Landmark;
-import com.navatar.data.Map;
+import com.navatar.maps.Map;
 import com.navatar.data.source.LandmarkProvider;
 import com.navatar.data.source.MapsRepository;
 import com.navatar.location.LocationProvider;

@@ -6,6 +6,11 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import com.navatar.maps.Route;
+import com.navatar.maps.Building;
+import com.navatar.maps.Landmark;
+import com.navatar.maps.Map;
+
 import java.util.UUID;
 
 /**
@@ -80,4 +85,25 @@ public final class RouteData {
     public String toString() {
         return mStartId + ":" + mEndId;
     }
+
+    public Route getRoute(Map map) {
+        Route route = new Route(map);
+        for(Building building : map.getBuildings()) {
+            if (building.getName().equals(mBuildingId)) {
+                route.setBuilding(building);
+                for(Landmark landmark : building.destinations()) {
+                    if (landmark.getName().equals(mStartId))
+                        route.setFromLandmark(landmark);
+                    else if (landmark.getName().equals(mEndId))
+                        route.setToLandmark(landmark);
+                    if (route.getFromLandmark() != null && route.getToLandmark() != null)
+                        break;
+                }
+                route.setPath(building.getRoute(route.getFromLandmark(), route.getToLandmark()));
+                break;
+            }
+        }
+        return route;
+    }
+
 }

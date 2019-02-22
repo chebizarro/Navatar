@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
-import com.navatar.data.Map;
+import com.navatar.maps.Map;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -3,7 +3,7 @@ package com.navatar.data.source.local;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.navatar.data.Route;
+import com.navatar.maps.Route;
 import com.navatar.data.source.MapsRepository;
 import com.navatar.data.source.RouteData;
 import com.navatar.data.source.RoutesDataSource;
@@ -42,7 +42,7 @@ public class RoutesLocalDataSource implements RoutesDataSource {
         return mMapsRepository.getMap(data.getMapId())
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .map(m -> new Route(m, data));
+                .map(data::getRoute);
     }
 
 

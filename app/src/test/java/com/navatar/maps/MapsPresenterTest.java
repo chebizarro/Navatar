@@ -1,7 +1,6 @@
 package com.navatar.maps;
 
 import com.google.common.collect.Lists;
-import com.navatar.data.Map;
 import com.navatar.data.source.MapsRepository;
 import com.navatar.data.source.RoutesRepository;
 import com.navatar.location.GeofencingProvider;

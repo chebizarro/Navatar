@@ -3,7 +3,7 @@ package com.navatar.data.source;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.navatar.data.Map;
+import com.navatar.maps.Map;
 
 import java.util.List;
 import com.google.common.base.Optional;

@@ -6,7 +6,7 @@ import android.util.Log;
 import com.navatar.common.SensorData;
 import com.navatar.common.SensorDataProvider;
 import com.navatar.maps.Landmark;
-import com.navatar.data.Route;
+import com.navatar.maps.Route;
 import com.navatar.data.source.LandmarkProvider;
 import com.navatar.data.source.RoutesRepository;
 import com.navatar.di.ActivityScoped;

@@ -16,8 +16,6 @@ import android.widget.TextView;
 
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.navatar.common.TextToSpeechProvider;
-import com.navatar.data.Map;
-import com.navatar.data.Route;
 import com.navatar.location.details.QRCodeScanner;
 import com.navatar.navigation.NavigationActivity;
 import com.navatar.R;
