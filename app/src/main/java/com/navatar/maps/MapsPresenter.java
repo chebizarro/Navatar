@@ -9,6 +9,7 @@ import com.navatar.data.source.RoutesRepository;
 import com.navatar.location.GeofencingProvider;
 import com.navatar.location.LocationInteractor;
 import com.navatar.pathplanning.Path;
+import com.navatar.pathplanning.PathFinder;
 import com.navatar.pathplanning.Step;
 
 import java.util.ArrayList;
@@ -16,16 +17,18 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
+/**
+ * @author Chris Daley
+ */
 public class MapsPresenter implements MapsContract.Presenter {
 
     private static final String TAG = MapsPresenter.class.getSimpleName();
 
     private final CompositeDisposable disposables = new CompositeDisposable();
-
-    @Inject
-    GeofencingProvider mGeofencingProvider;
 
     @Inject
     MapsRepository mMapRepository;
@@ -34,10 +37,10 @@ public class MapsPresenter implements MapsContract.Presenter {
     RoutesRepository mRoutesRepository;
 
     @Inject
-    LocationInteractor mLocationInteractor;
+    LandmarkProvider mLandmarkProvider;
 
     @Inject
-    LandmarkProvider mLandmarkProvider;
+    PathFinder mPathFinder;
 
     @Nullable
     private MapsContract.View mMapsView;
@@ -56,22 +59,6 @@ public class MapsPresenter implements MapsContract.Presenter {
                 mMapsView::showMaps,
                 throwable -> Log.e(TAG, "An error occurred map provider stream", throwable)
             ));
-
-        disposables.add(mMapRepository.getGeofences()
-            .subscribe(
-
-            ));
-
-        disposables.add(mLocationInteractor.getLocationUpdates()
-            .subscribe(
-                location -> {
-                    Log.e(TAG, "Lat: " + location.latitude() + " Long: " + location.longitude());
-                },
-                throwable -> {
-                    Log.e(TAG, "Error while getting location", throwable);
-                }
-            )
-        );
 
         disposables.add(mLandmarkProvider.getLandmarks()
             .subscribe(
@@ -104,13 +91,19 @@ public class MapsPresenter implements MapsContract.Presenter {
     @Override
     public void onToLandmarkSelected(Landmark landmark) {
         mRoute.setToLandmark(landmark);
-        Path path = mRoute.getPath();
-        if (path != null) {
-            mRoutesRepository.setSelectedRoute(mRoute);
-            mMapsView.showNavigation(mRoute);
-        } else {
-            mMapsView.showNoRouteFound();
-        }
+
+        disposables.add(mPathFinder.findPath(mRoute)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(path -> {
+                mRoute.setPath(path);
+                mRoutesRepository.setSelectedRoute(mRoute);
+                mMapsView.showNavigation(mRoute);
+            },
+            err -> {
+                mMapsView.showNoRouteFound();
+            })
+        );
     }
 
     @Override
@@ -134,7 +127,7 @@ public class MapsPresenter implements MapsContract.Presenter {
 
     @Override
     public void cleanup() {
-        disposables.clear();
+        disposables.dispose();
     }
 
     @Override

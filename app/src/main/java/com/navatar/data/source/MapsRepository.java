@@ -19,6 +19,9 @@ import io.reactivex.Flowable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * @author Chris Daley
+ */
 @Singleton
 public class MapsRepository implements MapsDataSource {
 

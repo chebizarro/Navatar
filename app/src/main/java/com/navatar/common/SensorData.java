@@ -1,5 +1,8 @@
 package com.navatar.common;
 
+/**
+ * @author Chris Daley
+ */
 public final class SensorData {
 
     public enum SensorType {

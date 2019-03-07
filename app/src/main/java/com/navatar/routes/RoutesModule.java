@@ -7,6 +7,9 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
+/**
+ * @author Chris Daley
+ */
 @Module
 public abstract class RoutesModule {
 

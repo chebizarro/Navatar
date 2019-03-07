@@ -16,6 +16,8 @@ import dagger.android.ContributesAndroidInjector;
  * nor do you need to tell these subcomponents that AppComponent exists.
  * We are also telling Dagger.Android that this generated SubComponent needs to include the specified modules and be aware of a scope annotation @ActivityScoped
  * When Dagger.Android annotation processor runs it will create 4 subcomponents for us.
+ *
+ * @author Chris Daley
  */
 @Module
 public abstract class ActivityBindingModule {

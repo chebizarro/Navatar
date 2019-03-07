@@ -20,6 +20,8 @@ import dagger.android.ContributesAndroidInjector;
 /**
  * This is a Dagger module. We use this to pass in the View dependency to the
  * {@link MainPresenter}.
+ *
+ * @author Chris Daley
  */
 @Module
 public abstract class MainModule {

@@ -3,6 +3,9 @@ package com.navatar.navigation;
 import com.navatar.BasePresenter;
 import com.navatar.BaseView;
 
+/**
+ * @author Chris Daley
+ */
 public interface NavigationContract {
 
     interface View extends BaseView<Presenter> {

@@ -35,6 +35,9 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.PublishSubject;
 
+/**
+ * @author Chris Daley
+ */
 @ActivityScoped
 public class MapsFragment extends DaggerFragment implements MapsContract.View {
 

@@ -7,6 +7,9 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
+/**
+ * @author Chris Daley
+ */
 @Module
 public abstract class NavigationModule {
 
@@ -17,4 +20,5 @@ public abstract class NavigationModule {
     @ActivityScoped
     @Binds
     abstract NavigationContract.Presenter navigationPresenter(NavigationPresenter presenter);
+
 }

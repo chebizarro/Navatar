@@ -43,7 +43,7 @@ captures/
 # Keystore files
 *.jks
 
-# map files
+# building files
 #*.nvm
 
 #OSX

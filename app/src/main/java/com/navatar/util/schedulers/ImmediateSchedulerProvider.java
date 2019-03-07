@@ -10,6 +10,8 @@ import io.reactivex.schedulers.Schedulers;
  * synchronously so we can easily run assertions in our tests.
  * <p>
  * To achieve this, we are using the {@link io.reactivex.internal.schedulers.TrampolineScheduler} from the {@link Schedulers} class.
+ *
+ * @author Chris Daley
  */
 public class ImmediateSchedulerProvider implements BaseSchedulerProvider {
 

@@ -13,6 +13,9 @@ import javax.inject.Named;
 
 import io.reactivex.disposables.CompositeDisposable;
 
+/**
+ * @author Chris Daley
+ */
 public class MainPresenter implements MainContract.Presenter {
 
     private static final String TAG = MainPresenter.class.getSimpleName();

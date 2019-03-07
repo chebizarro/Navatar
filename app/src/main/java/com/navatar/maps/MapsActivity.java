@@ -12,6 +12,9 @@ import dagger.Lazy;
 import dagger.android.AndroidInjection;
 import dagger.android.support.DaggerAppCompatActivity;
 
+/**
+ * @author Chris Daley
+ */
 public class MapsActivity extends DaggerAppCompatActivity {
 
     @Inject
@@ -28,14 +31,13 @@ public class MapsActivity extends DaggerAppCompatActivity {
         setContentView(R.layout.maps_activity);
 
         mapsFragment =
-                (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+            (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
 
         if (mapsFragment == null) {
             mapsFragment = mapsFragmentProvider.get();
             ActivityUtils.addFragmentToActivity(
-                    getSupportFragmentManager(), mapsFragment, R.id.contentFrame);
+                getSupportFragmentManager(), mapsFragment, R.id.contentFrame);
         }
-
     }
 
     @Override
@@ -44,5 +46,4 @@ public class MapsActivity extends DaggerAppCompatActivity {
             super.onBackPressed();
         }
     }
-
 }

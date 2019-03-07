@@ -7,6 +7,9 @@ import com.navatar.maps.Building;
 import com.navatar.maps.Landmark;
 import com.navatar.maps.Map;
 
+/**
+ * @author Chris Daley
+ */
 public class RouteTypeConverter {
 
     @TypeConverter

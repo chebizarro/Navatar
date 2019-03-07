@@ -1,20 +1,60 @@
 package com.navatar.maps;
 
+import com.navatar.maps.particles.ParticleState;
 import com.navatar.math.Constants;
 import com.navatar.protobufs.LandmarkProto;
+import com.navatar.protobufs.CoordinatesProto;
 
 import java.lang.reflect.Field;
 
 public class Landmark implements Comparable<Landmark> {
-
-    /** The original protobuf landmark. */
+    /**
+     * The {@link Map} that contains this {@link Landmark}
+     */
+    private Map mMap;
+    /**
+     * The {@link Building} that contains this {@link Landmark} or null if
+     * outdoors
+     */
+    private Building mBuilding;
+    /**
+     * The original protobuf landmark.
+     * */
     private LandmarkProto.Landmark landmark;
-
-    /** The landmarks weight which is based on its distance from the tile. */
+    /**
+     * The landmarks weight which is based on its distance from the tile.
+     * */
     private double weight;
+    /**
+     * The {@link ParticleState} of the {@link Landmark}
+     */
+    private ParticleState mParticleState;
 
     public Landmark(LandmarkProto.Landmark landmark) {
         this.landmark = landmark;
+
+    }
+
+    public Landmark(LandmarkProto.Landmark landmark, Map map) {
+        this(landmark);
+        mMap = map;
+    }
+
+    public Landmark(LandmarkProto.Landmark landmark, Map map, Building building) {
+        this(landmark, map);
+        mBuilding = building;
+    }
+
+    public Map getMap() { return mMap; }
+
+    public void setMap(Map map) { mMap = map; }
+
+    public Building getBuilding() {
+        return mBuilding;
+    }
+
+    public void setBuilding(Building building) {
+        this.mBuilding = building;
     }
 
     public void setWeight(double weight) {
@@ -83,6 +123,10 @@ public class Landmark implements Comparable<Landmark> {
 
     public LandmarkProto.Landmark.LandmarkType getType() {
         return landmark.getType();
+    }
+
+    public ParticleState getParticleState() {
+        return mParticleState;
     }
 
 }

@@ -6,6 +6,8 @@ import io.reactivex.Scheduler;
 
 /**
  * Allow providing different types of {@link Scheduler}s.
+ *
+ * @author Chris Daley
  */
 public interface BaseSchedulerProvider {
 

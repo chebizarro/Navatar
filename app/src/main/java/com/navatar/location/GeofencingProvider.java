@@ -5,6 +5,9 @@ import com.navatar.location.model.GeofenceRequest;
 
 import io.reactivex.Single;
 
+/**
+ * @author Chris Daley
+ */
 public interface GeofencingProvider {
 
     final class Status {

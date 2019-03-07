@@ -37,6 +37,9 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.PublishSubject;
 
+/**
+ * @author Chris Daley
+ */
 @Singleton
 public class QRCodeScanner implements LocationProvider, LandmarkProvider {
 

@@ -9,12 +9,13 @@ import com.navatar.protobufs.FloorProto;
 import com.navatar.protobufs.LandmarkProto;
 import com.navatar.protobufs.MinimapProto;
 
+import com.navatar.pathplanning.Path;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Building {
     /**
@@ -24,23 +25,27 @@ public class Building {
     /**
      * The minimap grid that stores the tiles.
      */
-    private HashMap<Integer, Tile[][]> minimaps;
+    private HashMap<Integer, Tile[][]> minimaps = new HashMap<>();
     /**
      * The accessible spaces of the map divided by floor.
      */
-    //private HashMap<Integer, Path> accessibleSpaces;
+    //private HashMap<Integer, Path> accessibleSpaces = new HashMap<>();
     /**
      * Dispatches floor indices from floor numbers.
      */
-    private HashMap<Integer, Integer> floorsToIndices;
+    private HashMap<Integer, Integer> floorsToIndices = new HashMap<>();
+
+    private List<Landmark> mLandmarks = new ArrayList<>();
+
+    /**
+     * The {@link com.navatar.maps.Map} the contains this {@link Building}
+     */
+    private Map mMap;
+
 
     public Building(BuildingMapProto.BuildingMap map) {
         this.protoMap = map;
-        minimaps = new HashMap<>();
-        //accessibleSpaces = new HashMap<>();
-        floorsToIndices = new HashMap<>();
         int i = 0;
-
         for (FloorProto.Floor floor : map.getFloorsList()) {
             MinimapProto.Minimap minimap = floor.getMinimap();
             Tile[][] floorTiles = new Tile[minimap.getRows()][minimap.getColumns()];
@@ -52,6 +57,14 @@ public class Building {
             //accessibleSpaces.put(floor.getNumber(), createAccessibleArea(floor.getNavigableSpacesList()));
             floorsToIndices.put(floor.getNumber(), i++);
         }
+    }
+
+    public void setMap(Map map) {
+        mMap = map;
+    }
+
+    public Map getMap() {
+        return mMap;
     }
 
     /**
@@ -95,11 +108,11 @@ public class Building {
     }*/
 
     /**
-     * Finds and returns the location of the room with the specific name given as a parameter.
+     * Finds and returns the {@link ParticleState} of the room with the specific name given as a parameter.
      *
      * @param room The room name to use in order to find its location.
-     * @return The location of the room with the given name, or null if there is no door with the
-     * specific name.
+     * @return The {@link ParticleState} of the room with the given name, or null if there is no
+     * {@link Landmark} with the specific name.
      */
     public ParticleState getRoomLocation(String room) {
         for (FloorProto.Floor floor : protoMap.getFloorsList()) {
@@ -113,13 +126,14 @@ public class Building {
         return null;
     }
 
+
     /**
      * Returns all the rooms in the map.
      *
      * @return All the rooms contained in the map.
      */
     public List<Landmark> destinations() {
-        ArrayList<Landmark> rooms = new ArrayList<Landmark>();
+        ArrayList<Landmark> rooms = new ArrayList<>();
         for (FloorProto.Floor floor : protoMap.getFloorsList()) {
             for (LandmarkProto.Landmark landmark : floor.getLandmarksList()) {
                 if (landmark.getType() == LandmarkProto.Landmark.LandmarkType.DOOR)
@@ -212,11 +226,11 @@ public class Building {
      *
      * @param state The location to search for landmarks.
      */
-    public Map<LandmarkProto.Landmark.LandmarkType, List<Landmark>> getLandmarks(ParticleState state) {
+    public java.util.Map<LandmarkProto.Landmark.LandmarkType, List<Landmark>> getLandmarks(ParticleState state) {
         Tile tile = getTile(state);
         if (tile != null)
             return tile.getLandmarks();
-        return new HashMap<LandmarkProto.Landmark.LandmarkType, List<Landmark>>();
+        return new HashMap<>();
     }
 
     Tile getTile(ParticleState state) {
@@ -258,25 +272,6 @@ public class Building {
         return !(isAccessible(start) && isAccessible(end));
     }
 
-
-    public com.navatar.pathplanning.Path getRoute(Landmark start, Landmark end) {
-
-        if (start == null || end == null)
-            return null;
-
-        AStar pathFinder = new AStar(this);
-
-        ParticleState startState = getRoomLocation(start.getName());
-        ParticleState endState = getRoomLocation(end.getName());
-        com.navatar.pathplanning.Path path = pathFinder.findPath(startState, start, endState, end);
-        Direction directionGenerator = new Direction(getProtobufMap());
-
-        if (path != null) {
-            path = directionGenerator.generateDirections(path);
-        }
-
-        return path;
-    }
 
     public String getName() {
         return protoMap.getName();

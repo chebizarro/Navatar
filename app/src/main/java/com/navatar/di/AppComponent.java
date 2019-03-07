@@ -24,6 +24,8 @@ import javax.inject.Singleton;
  * //{@link AndroidSupportInjectionModule}
  * // is the module from Dagger.Android that helps with the generation
  * // and location of subcomponents.
+ *
+ * @author Chris Daley
  */
 @Singleton
 @Component(modules = {

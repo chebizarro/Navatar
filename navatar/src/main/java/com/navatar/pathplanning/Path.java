@@ -13,18 +13,15 @@ public class Path {
     /**
      * The list of steps building up this path, Steps[0] is where you are at right now.
      */
-    private ArrayList<Step> steps;
+    private ArrayList<Step> steps = new ArrayList<>();;
 
     private int floor;
 
     private int mOrientation;
-
     /**
      * Create an empty path
      */
-    public Path() {
-        steps = new ArrayList<>();
-    }
+    public Path() { }
 
     public int getFloor() {
         return floor;
@@ -41,7 +38,6 @@ public class Path {
     public void setOrientation(int orientation) {
         this.mOrientation = orientation;
     }
-
     /**
      * Get the length of the path, i.e. the number of steps
      *
@@ -50,7 +46,6 @@ public class Path {
     public int getLength() {
         return steps.size();
     }
-
     /**
      * Get the landmark at a given index in the path
      *
@@ -60,7 +55,6 @@ public class Path {
     public Step getStep(int index) {
         return (index < steps.size()) ? steps.get(index) : null;
     }
-
     /*
      * Add a step to the path.
      */

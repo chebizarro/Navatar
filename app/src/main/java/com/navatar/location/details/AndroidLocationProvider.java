@@ -24,6 +24,9 @@ import com.patloew.rxlocation.RxLocation;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author Chris Daley
+ */
 public class AndroidLocationProvider implements LocationProvider, GeofencingProvider {
 
     private final String TAG = AndroidLocationProvider.class.getSimpleName();

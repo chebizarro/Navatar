@@ -1,6 +1,7 @@
 package com.navatar.particlefilter;
 
 import com.navatar.maps.Building;
+import com.navatar.maps.Map;
 import com.navatar.maps.particles.Cluster;
 import com.navatar.maps.particles.KMeans;
 import com.navatar.maps.particles.Particle;
@@ -18,6 +19,8 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.Vector;
 
+import io.reactivex.Flowable;
+
 public class ParticleFilter {
     private static final int NUM_OF_PARTICLE_FILTERS = 10;
     private static final int NUM_OF_PARTICLES = 1000;
@@ -29,45 +32,40 @@ public class ParticleFilter {
     private static final double LANDMARK_RADIUS = 5.0;
 
     private int run;
-    private float staticStepV = (float) 0.1;
-    private boolean printData = false, printEstimation = true;
+    private float staticStepV = 0.1f;
 
-    private LinkedList<Transition> transitions;
-    private Particle[][] particles;
+    private LinkedList<Transition> transitions = new LinkedList<>();
+    private Particle[][] particles = new Particle[NUM_OF_PARTICLE_FILTERS][NUM_OF_PARTICLES_PER_PF];
     private Building map;
-    private static Random rand;
-    private float[] stepM;
+    private static Random sRandom = new Random();
+    private float[] stepM = new float[NUM_OF_PARTICLE_FILTERS];
 
     private ParticleState locationEstimation;
-    private double[][] pfEllipses;
+    private double[][] pfEllipses = new double[NUM_OF_PARTICLE_FILTERS][5];
 
-    private DecimalFormat twoDForm;
+    private DecimalFormat twoDForm = new DecimalFormat("#0.00000");
 
-    private float stepMean;
-    private float stepMeanDiff;
+    private float stepMean = 1.0f;
+    private float stepMeanDiff = 0.0933f;
+
+    public ParticleFilter(Map map, ParticleState startingState) {
+
+    }
 
     public ParticleFilter(Building map, ParticleState startingState) {
-        rand = new Random();
-        this.transitions = new LinkedList<>();
         this.map = map;
-        this.particles = new Particle[NUM_OF_PARTICLE_FILTERS][NUM_OF_PARTICLES_PER_PF];
-        this.stepM = new float[NUM_OF_PARTICLE_FILTERS];
-        stepMean = 1.0f;
-        stepMeanDiff = 0.0933f;
+        locationEstimation = startingState;
+
         float currMean = stepMean;
         for (int i = 0; i < NUM_OF_PARTICLE_FILTERS; ++i, currMean += 3 * stepMeanDiff)
             stepM[i] = currMean;
 
-        pfEllipses = new double[NUM_OF_PARTICLE_FILTERS][5];
-        twoDForm = new DecimalFormat("#0.00000");
-
         double newX, newY;
-        locationEstimation = startingState;
         for (int j = 0; j < NUM_OF_PARTICLE_FILTERS; ++j) {
             for (int i = 0; i < NUM_OF_PARTICLES_PER_PF; ++i) {
                 do {
-                    newX = startingState.getX() + 2 * rand.nextGaussian();
-                    newY = startingState.getY() + 2 * rand.nextGaussian();
+                    newX = startingState.getX() + 2 * sRandom.nextGaussian();
+                    newY = startingState.getY() + 2 * sRandom.nextGaussian();
                 } while (!map.isAccessible(newX, newY, startingState.getFloor()));
 
                 particles[j][i] = Particle.newInstance(
@@ -103,9 +101,9 @@ public class ParticleFilter {
         return newTransition;
     }
 
-    public void execute() throws IOException {
+    public void execute() {
         Vector<Transition> currTransitions = new Vector<>();
-        Transition currTransition = null, integratedTransition;
+        Transition currTransition, integratedTransition;
         ParticleState newState;
         long currTime;
         int i;
@@ -143,7 +141,7 @@ public class ParticleFilter {
                 currTransitions.clear();
                 sampling(currentLandmark);
 
-                // locationEstimation = kmeans.greatestCluster(particles);
+                //locationEstimation = kmeans.greatestCluster(particles);
 
                 /*
                 if (printData) {
@@ -181,26 +179,26 @@ public class ParticleFilter {
                                           float stepM) {
         int steps = integratedTransition.getStep();
         ParticleState prevState = particle.getLastState();
-        double choice = rand.nextDouble(), newDisp = 0, toRadians;
+        double choice = sRandom.nextDouble(), newDisp = 0, toRadians;
         int newDir;
         if (steps > 0) {
             for (int i = 0; i < steps; ++i) {
                 if (choice > 0.01)
-                    newDisp += rand.nextGaussian() * stepMeanDiff + integratedTransition.getStep() * stepM;
+                    newDisp += sRandom.nextGaussian() * stepMeanDiff + integratedTransition.getStep() * stepM;
                 else
-                    newDisp += rand.nextGaussian() * staticStepV;
+                    newDisp += sRandom.nextGaussian() * staticStepV;
             }
         } else {
             if (choice > 0.2)
-                newDisp = (float) rand.nextGaussian() * staticStepV;
+                newDisp = (float) sRandom.nextGaussian() * staticStepV;
             else
                 newDisp =
-                        (float) rand.nextGaussian() * stepMeanDiff + integratedTransition.getStep() * stepM;
+                        (float) sRandom.nextGaussian() * stepMeanDiff + integratedTransition.getStep() * stepM;
         }
 
         if (newDisp < 0)
             newDisp = 0;
-        // newDir = rand.nextGaussian()*dirV+integratedTransition.getDirection();
+        // newDir = sRandom.nextGaussian()*dirV+integratedTransition.getDirection();
         newDir = pickBiasedOrientation(integratedTransition.getDirection());
         toRadians = Math.toRadians(newDir);
         return new ParticleState(newDir, prevState.getX() + newDisp * Math.cos(toRadians),
@@ -210,7 +208,7 @@ public class ParticleFilter {
     private static int pickBiasedOrientation(int direction) {
 
         int i;
-        double choice = rand.nextDouble(), distr = 0;
+        double choice = sRandom.nextDouble(), distr = 0;
         final double[] dirProb = {0.0942998415, 0.811400318, 0.0942998414};
 
         for (i = 0; i < dirProb.length && choice > (distr += dirProb[i]); ++i)
@@ -281,7 +279,6 @@ public class ParticleFilter {
             // If all particle filters are dead reset them
             if (bestPFindex == -1) {
                 //logs.append("\nAll particles died!!!\nType of landmark: " + type);
-                //logs.writeFile(true);
                 for (i = 0; i < NUM_OF_PARTICLES_PER_PF; ++i) {
                     currState = particles[l][i].getLastState();
                     if (!map.isAccessible(currState))
@@ -315,10 +312,9 @@ public class ParticleFilter {
             // If the current particle filter is dead resample with the best one
             else if (weights[l] < 0.0001) {
                 //logs.append("\nParticle filter with step " + stepM[l] + " died!!!\n");
-                //logs.writeFile(true);
                 for (i = 0; i < NUM_OF_PARTICLES_PER_PF; ++i)
                     particles[bestPFindex][i].copyTo(particles[l][i]);
-                stepM[l] = stepM[bestPFindex] + (float) rand.nextGaussian() * stepMeanDiff;
+                stepM[l] = stepM[bestPFindex] + (float) sRandom.nextGaussian() * stepMeanDiff;
             }
             // Calculate new pdf
             pdf[0] = particles[l][0].getWeight();
@@ -326,7 +322,7 @@ public class ParticleFilter {
                 pdf[i] = particles[l][i].getWeight() + pdf[i - 1];
             for (i = 0, j = 0; i < NUM_OF_PARTICLES_PER_PF; ++i) {
                 if (particles[l][i].getWeight() < 0.0001) {
-                    selection = rand.nextDouble() * pdf[NUM_OF_PARTICLES_PER_PF - 1];
+                    selection = sRandom.nextDouble() * pdf[NUM_OF_PARTICLES_PER_PF - 1];
                     for (j = 0; j < NUM_OF_PARTICLES_PER_PF && pdf[j] < selection; ++j)
                         ;
                     particles[l][j].copyTo(particles[l][i]);
@@ -337,8 +333,6 @@ public class ParticleFilter {
             float currMean = stepMean;
             for (i = 0; i < NUM_OF_PARTICLE_FILTERS; ++i, currMean += 3 * stepMeanDiff)
                 stepM[i] = currMean;
-            //logs.append("\n");
-            //logs.writeFile(true);
         }
     }
 
@@ -346,7 +340,7 @@ public class ParticleFilter {
         ParticleState state;
 
         do {
-            state = particles[rand.nextInt(NUM_OF_PARTICLES_PER_PF)].getNewState();
+            state = particles[sRandom.nextInt(NUM_OF_PARTICLES_PER_PF)].getNewState();
         } while (!map.isAccessible(state));
 
         return state;
@@ -401,8 +395,8 @@ public class ParticleFilter {
     public ParticleState getSynchronizedLocationEstimate() {
         synchronized (particles) {
             KMeans<ParticleState> kmeans =
-                    new KMeans<ParticleState>(NUM_OF_CLUSTERS, KMEANS_CONVERGENCE, KMEANS_MAX_DIAMETER);
-            Vector<ParticleState> states = new Vector<ParticleState>();
+                    new KMeans<>(NUM_OF_CLUSTERS, KMEANS_CONVERGENCE, KMEANS_MAX_DIAMETER);
+            Vector<ParticleState> states = new Vector<>();
             for (Particle[] particleFilter : particles) {
                 for (Particle particle : particleFilter)
                     states.add(particle.getLastState());
@@ -431,11 +425,11 @@ public class ParticleFilter {
             for (int j = 0; j < NUM_OF_PARTICLE_FILTERS; ++j) {
                 for (int i = 0; i < NUM_OF_PARTICLES_PER_PF; ++i) {
                     do {
-                        newX = transitionState.getX() + 2 * rand.nextGaussian();
-                        newY = transitionState.getY() + 2 * rand.nextGaussian();
+                        newX = transitionState.getX() + 2 * sRandom.nextGaussian();
+                        newY = transitionState.getY() + 2 * sRandom.nextGaussian();
                     } while (!map.isAccessible((int) (newX + 0.5), (int) (newY + 0.5), floor));
                     particles[j][i]
-                            .addState(new ParticleState(transitionState.getDirection(), newX, newY, floor));
+                        .addState(new ParticleState(transitionState.getDirection(), newX, newY, floor));
                 }
             }
         }
@@ -448,14 +442,13 @@ public class ParticleFilter {
     public class ExecutePF extends Thread {
 
         public void run() {
-            try {
-                execute();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            execute();
         }
 
-        public void interrupt() {
-        }
+        public void interrupt() { }
+    }
+
+    public Flowable<ParticleState> onStateChange() {
+        return null;
     }
 }

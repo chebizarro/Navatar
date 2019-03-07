@@ -28,7 +28,6 @@ public final class Route {
 
     public void setFromLandmark(Landmark landmark) {
         mFromLandmark = landmark;
-        mPath = mBuilding.getRoute(mFromLandmark, mToLandmark);
     }
 
 
@@ -42,7 +41,6 @@ public final class Route {
 
     public void setToLandmark(Landmark landmark) {
         mToLandmark = landmark;
-        mPath = mBuilding.getRoute(mFromLandmark, mToLandmark);
     }
 
     public void setPath(Path path) {
@@ -52,5 +50,40 @@ public final class Route {
     public Path getPath() {
         return mPath;
     }
+
+    /*
+    private void getRoute() {
+
+        if (mFromLandmark == null || mToLandmark == null)
+            return;
+
+
+        AStar pathFinder = new AStar(mBuilding);
+
+
+        Path path = pathFinder.findPath(mFromLandmark, mToLandmark);
+
+
+
+        CoordinatesProto.Coordinates particle = mFromLandmark.getParticles(0);
+        ParticleState startState = new ParticleState(0,
+            particle.getX(), particle.getY(), mFromLandmark.getFloor());
+
+        particle = mToLandmark.getParticles(0);
+
+        ParticleState endState = new ParticleState(0,
+                particle.getX(), particle.getY(), mFromLandmark.getFloor());
+
+        Path path = pathFinder.findPath(startState, mFromLandmark, endState, mToLandmark);
+        Direction directionGenerator = new Direction(getProtobufMap());
+
+        if (path != null) {
+            path = directionGenerator.generateDirections(path);
+        }
+
+        mPath = path;
+
+
+    }*/
 
 }

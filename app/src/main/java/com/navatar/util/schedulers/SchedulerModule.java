@@ -6,6 +6,9 @@ import dagger.Module;
 import dagger.Binds;
 import dagger.Provides;
 
+/**
+ * @author Chris Daley
+ */
 @Module
 public abstract class SchedulerModule {
 

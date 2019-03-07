@@ -1,5 +1,8 @@
 package com.navatar.common;
 
+/**
+ * @author Chris Daley
+ */
 public interface TextToSpeechProvider {
 
     void speak(String text);

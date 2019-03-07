@@ -13,6 +13,10 @@ import java.util.Set;
 
 import io.reactivex.Observable;
 
+
+/**
+ * @author Chris Daley
+ */
 public class LocationInteractor {
 
     private final Set<LocationProvider> locationProviders;

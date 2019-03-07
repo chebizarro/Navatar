@@ -15,6 +15,7 @@ import java.util.UUID;
 
 /**
  * Immutable model class for a Route Record
+ * @author Chris Daley
  */
 @Entity(tableName = "routes")
 public final class RouteData {

@@ -10,6 +10,8 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * Provides different types of schedulers.
+ *
+ * @author Chris Daley
  */
 public class SchedulerProvider implements BaseSchedulerProvider {
 

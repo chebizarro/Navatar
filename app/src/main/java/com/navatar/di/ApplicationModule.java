@@ -3,16 +3,17 @@ package com.navatar.di;
 import android.app.Application;
 import android.content.Context;
 
-import com.navatar.common.SensorData;
 import com.navatar.common.SensorDataProvider;
 import com.navatar.common.TextToSpeechProvider;
+import com.navatar.common.details.AndroidSensorProvider;
 import com.navatar.common.details.AndroidTTSProvider;
-import com.navatar.common.details.NavatarSensorProvider;
 import com.navatar.data.source.LandmarkProvider;
 import com.navatar.location.GeofencingProvider;
 import com.navatar.location.LocationProvider;
 import com.navatar.location.details.AndroidLocationProvider;
 import com.navatar.location.details.QRCodeScanner;
+import com.navatar.navigation.NavigationProvider;
+import com.navatar.navigation.details.AndroidNavigationProvider;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -30,6 +31,8 @@ import dagger.multibindings.ElementsIntoSet;
  * One of the advantages of Dagger.Android is that your
  * Application & Activities are provided into your graph for you.
  * {@link AppComponent}.
+ *
+ * @author Chris Daley
  */
 @Module
 public abstract class ApplicationModule {
@@ -47,10 +50,13 @@ public abstract class ApplicationModule {
     abstract TextToSpeechProvider provideTextToSpeechProvider(AndroidTTSProvider ttsProvider);
 
     @Binds
-    abstract SensorDataProvider provideSensorDataProvider(NavatarSensorProvider sensorProvider);
+    abstract SensorDataProvider provideSensorDataProvider(AndroidSensorProvider sensorProvider);
 
     @Binds
     abstract LandmarkProvider provideLandmarkProvider(QRCodeScanner qrs);
+
+    @Binds
+    abstract NavigationProvider provideNavigationProvider(AndroidNavigationProvider androidNavigationProvider);
 
     @Provides
     @ElementsIntoSet

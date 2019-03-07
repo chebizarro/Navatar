@@ -9,6 +9,9 @@ import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
 import javax.inject.Inject;
 
+/**
+ * @author Chris Daley
+ */
 public class ReferencePointApplication extends DaggerApplication {
     @Inject
     MapsRepository mapRepository;

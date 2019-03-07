@@ -5,11 +5,12 @@ package com.navatar.math;
 
 /**
  * Defines static constant values for com.navatar.math uses.
- * 
- * @author ilias
  *
+ * @author ilias
  */
 public class Constants {
-  /** The acceptable accuracy of a double value when compared with zero. */
-  public static final double DOUBLE_ACCURACY = 0.00001;
+    /**
+     * The acceptable accuracy of a double value when compared with zero.
+     */
+    public static final double DOUBLE_ACCURACY = 0.00001;
 }

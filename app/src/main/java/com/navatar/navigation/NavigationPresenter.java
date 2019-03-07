@@ -20,6 +20,9 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.PublishSubject;
 
+/**
+ * @author Chris Daley
+ */
 @ActivityScoped
 public final class NavigationPresenter implements NavigationContract.Presenter {
 
@@ -31,16 +34,11 @@ public final class NavigationPresenter implements NavigationContract.Presenter {
     RoutesRepository mRoutesRepository;
 
     @Inject
-    GeofencingProvider mGeofencingProvider;
-
-    @Inject
-    LocationInteractor mLocationInteractor;
-
-    @Inject
-    SensorDataProvider mSensorDataProvider;
-
-    @Inject
     LandmarkProvider mLandmarkProvider;
+
+
+    @Inject
+    NavigationProvider mNavigationProvider;
 
     @Nullable
     private NavigationContract.View mNavView;
@@ -52,8 +50,6 @@ public final class NavigationPresenter implements NavigationContract.Presenter {
 
     private Path mPath;
 
-    private final PublishSubject<SensorData> sensorDataPublishSubject = PublishSubject.create();
-
     @Inject
     public NavigationPresenter() { }
 
@@ -61,6 +57,17 @@ public final class NavigationPresenter implements NavigationContract.Presenter {
     public void takeView(NavigationContract.View view) {
         disposables.clear();
         mNavView = view;
+
+        disposables.add(mNavigationProvider.navigate()
+            .subscribe(
+                location -> {
+                    Log.e(TAG, "Lat: " + location.latitude() + " Long: " + location.longitude());
+                },
+                throwable -> {
+                    Log.e(TAG, "Error while getting location", throwable);
+                }
+            ));
+
         loadData();
     }
 
@@ -130,49 +137,8 @@ public final class NavigationPresenter implements NavigationContract.Presenter {
             return;
         }
 
-        getLocation();
-        getSensorData();
         setupLandmarkProvider();
         onStartNavigation();
-    }
-
-    private void getLocation() {
-        disposables.add(mLocationInteractor.getLocationUpdates()
-            .subscribe(
-                location -> {
-                    Log.e(TAG, "Lat: " + location.latitude() + " Long: " + location.longitude());
-                },
-                throwable -> {
-                    Log.e(TAG, "Error while getting location", throwable);
-                }
-            )
-        );
-    }
-
-    private void getSensorData() {
-        disposables.add(mSensorDataProvider.onSensorChanged()
-            .subscribe(sensorDataPublishSubject::onNext)
-        );
-
-        disposables.add(sensorDataPublishSubject
-            .filter(s -> s.getSensorType() == SensorData.SensorType.COMPASS)
-            .subscribe(this::compassCorrection)
-        );
-
-        disposables.add(sensorDataPublishSubject
-            .filter(s -> s.getSensorType() == SensorData.SensorType.PEDOMETER)
-            .subscribe(this::stepSensorCorrection)
-        );
-    }
-
-    private void compassCorrection(SensorData data) {
-        if(mPath != null) {
-            mPath.setOrientation(Angles.discretizeAngle(Angles.compassToScreen(Math.toDegrees(data.getValues()[0]))));
-        }
-    }
-
-    private void stepSensorCorrection(SensorData data) {
-        Log.i(TAG, data.toString());
     }
 
     private void setupLandmarkProvider() {

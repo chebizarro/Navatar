@@ -11,6 +11,9 @@ import java.lang.ref.WeakReference;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+/**
+ * @author Chris Daley
+ */
 @Singleton
 public class AndroidTTSProvider implements TextToSpeechProvider, TextToSpeech.OnInitListener {
 

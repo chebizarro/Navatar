@@ -13,6 +13,8 @@ import javax.inject.Scope;
  * {@link AppComponent} is a scoped component ({@code @Singleton}, we create a custom
  * scope to be used by all fragment components. Additionally, a component with a specific scope
  * cannot have a sub component with the same scope.
+ *
+ * @author Chris Daley
  */
 @Documented
 @Scope

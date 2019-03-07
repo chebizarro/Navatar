@@ -24,6 +24,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerFragment;
 
+/**
+ * @author Chris Daley
+ */
 @ActivityScoped
 public class MainFragment extends DaggerFragment implements MainContract.View {
 

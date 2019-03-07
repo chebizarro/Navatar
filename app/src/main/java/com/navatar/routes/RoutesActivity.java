@@ -12,6 +12,9 @@ import dagger.Lazy;
 import dagger.android.AndroidInjection;
 import dagger.android.support.DaggerAppCompatActivity;
 
+/**
+ * @author Chris Daley
+ */
 public class RoutesActivity extends DaggerAppCompatActivity {
 
     @Inject

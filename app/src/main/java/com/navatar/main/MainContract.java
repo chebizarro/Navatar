@@ -1,10 +1,12 @@
 package com.navatar.main;
 
-
 import com.navatar.BasePresenter;
 import com.navatar.BaseView;
 import com.navatar.common.PermissionRequestHandler;
 
+/**
+ * @author Chris Daley
+ */
 public interface MainContract {
 
     interface View extends BaseView<Presenter> {

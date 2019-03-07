@@ -35,7 +35,9 @@ import io.reactivex.Observable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-
+/**
+ * @author Chris Daley
+ */
 @Singleton
 public class MapsLocalDataSource implements MapsDataSource {
 
@@ -75,19 +77,22 @@ public class MapsLocalDataSource implements MapsDataSource {
     }
 
     private Map newMap(String path) {
-        List<Building> buildings = new ArrayList<>();
+
+        Map map = new Map(path, path.replace('_', ' '));
         try {
             String[] buildingNames = assetManager.list("maps/" + path);
+
             for (String buildingName : buildingNames) {
                 if (!buildingName.endsWith(".json")) {
-                    buildings.add(new Building(BuildingMapProto.BuildingMap.parseFrom(
-                            assetManager.open("maps/" + path + "/" + buildingName))));
+                    BuildingMapProto.BuildingMap pmap = BuildingMapProto.BuildingMap.parseFrom(
+                            assetManager.open("maps/" + path + "/" + buildingName));
+                    map.addBuilding(new Building(pmap));
                 }
             }
         } catch (IOException e) {
 
         }
-        return new Map(path, path.replace('_', ' '), buildings);
+        return map;
     }
 
     @Override

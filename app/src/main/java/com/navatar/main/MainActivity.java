@@ -11,6 +11,9 @@ import dagger.Lazy;
 import dagger.android.AndroidInjection;
 import dagger.android.support.DaggerAppCompatActivity;
 
+/**
+ * @author Chris Daley
+ */
 public class MainActivity extends DaggerAppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();

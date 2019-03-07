@@ -20,7 +20,7 @@ public class SensingService extends Service {
     public void onCreate() {
         // Activates the sensors for reading data and initializes the listeners
         this.mgr = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        this.sensors = new SparseArray<NavatarSensor>();
+        this.sensors = new SparseArray<>();
 
         this.sensors.append(NavatarSensor.ACCELEROMETER, new Accelerometer(mgr));
         this.sensors.append(NavatarSensor.COMPASS, new Compass(mgr));

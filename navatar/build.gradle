@@ -4,6 +4,9 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':protobufs')
     implementation 'com.google.protobuf:protobuf-lite:3.0.1'
+    // rxjava
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
+
     testImplementation 'junit:junit:4.12'
     testImplementation 'com.google.protobuf:protobuf-java-util:3.6.1'
 }

@@ -1,5 +1,7 @@
 package com.navatar.maps;
 
+import com.navatar.maps.particles.ParticleState;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,11 @@ public class Map {
         return mBuildings;
     }
 
+    public void addBuilding(Building building) {
+        building.setMap(this);
+        mBuildings.add(building);
+    }
+
     public Building getBuilding(String buildingId) {
         for (Building building : mBuildings) {
             if (building.getName().equals(buildingId)) {
@@ -42,6 +49,13 @@ public class Map {
             }
         }
         return  null;
+    }
+
+    public List<Landmark> getLandmarks(ParticleState state) {
+
+
+
+        return new ArrayList<>();
     }
 
     @Override

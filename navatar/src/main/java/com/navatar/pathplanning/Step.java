@@ -1,7 +1,7 @@
 package com.navatar.pathplanning;
 
-import com.navatar.maps.particles.ParticleState;
 import com.navatar.maps.Landmark;
+import com.navatar.maps.particles.ParticleState;
 
 /**
  * A single step within the path
@@ -18,15 +18,9 @@ public class Step {
     /**
      * Create a new step
      *
-     * @param x The x coordinate of the new step
-     * @param y The y coordinate of the new step
+     * @param inlandmark the goal {@link Landmark} for this step
+     * @param pState the {@link ParticleState} of the step
      */
-
-    public Step() {
-        this.direction = "";
-        this.particlestate = new ParticleState();
-    }
-
     public Step(Landmark inlandmark, ParticleState pState) {
         this.direction = "";
         this.particlestate = pState;
@@ -53,16 +47,9 @@ public class Step {
         return this.particlestate;
     }
 
-    /* Getters and setters for particle states */
     public void setParticleState(ParticleState pState) {
         this.particlestate = pState;
     }
-
-    /**
-     * Get the y coordinate of the new step
-     *
-     * @return The y coordinate of the new step
-     */
 
     /**
      * @see Object#hashCode()

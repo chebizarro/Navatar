@@ -8,6 +8,9 @@ import com.navatar.pathplanning.Step;
 
 import java.util.List;
 
+/**
+ * @author Chris Daley
+ */
 public interface MapsContract {
 
     interface View extends BaseView<Presenter> {

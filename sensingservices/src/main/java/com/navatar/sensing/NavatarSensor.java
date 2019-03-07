@@ -17,7 +17,7 @@ public abstract class NavatarSensor implements SensorEventListener {
     protected LinkedList<NavatarSensorListener> listeners;
 
     protected NavatarSensor(SensorManager mgr) {
-        listeners = new LinkedList<NavatarSensorListener>();
+        listeners = new LinkedList<>();
         this.mgr = mgr;
     }
 

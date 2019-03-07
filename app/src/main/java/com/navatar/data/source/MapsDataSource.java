@@ -11,6 +11,9 @@ import com.navatar.location.model.Geofence;
 
 import io.reactivex.Flowable;
 
+/**
+ * @author Chris Daley
+ */
 public interface MapsDataSource {
 
     Flowable<List<Map>> getMaps();
