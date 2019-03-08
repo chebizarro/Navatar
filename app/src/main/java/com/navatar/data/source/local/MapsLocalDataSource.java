@@ -84,9 +84,8 @@ public class MapsLocalDataSource implements MapsDataSource {
 
             for (String buildingName : buildingNames) {
                 if (!buildingName.endsWith(".json")) {
-                    BuildingMapProto.BuildingMap pmap = BuildingMapProto.BuildingMap.parseFrom(
-                            assetManager.open("maps/" + path + "/" + buildingName));
-                    map.addBuilding(new Building(pmap));
+                    Building bldg = new Building(assetManager.open("maps/" + path + "/" + buildingName));
+                    map.addBuilding(bldg);
                 }
             }
         } catch (IOException e) {

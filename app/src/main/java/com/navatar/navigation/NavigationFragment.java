@@ -49,8 +49,8 @@ public class NavigationFragment extends DaggerFragment implements NavigationCont
     @Inject
     NavigationContract.Presenter mPresenter;
 
-    @Inject
-    QRCodeScanner qrCodeScanner;
+    //@Inject
+    //QRCodeScanner qrCodeScanner;
 
     @Inject
     TextToSpeechProvider mTTSProvider;
@@ -110,7 +110,7 @@ public class NavigationFragment extends DaggerFragment implements NavigationCont
             mPresenter.onReverseRoute();
         });
 
-        qrCodeScanner.setView(barcodeView, getActivity().getIntent());
+        //qrCodeScanner.setView(barcodeView, getActivity().getIntent());
 
         mGestureDetector = getGestureDetector();
 

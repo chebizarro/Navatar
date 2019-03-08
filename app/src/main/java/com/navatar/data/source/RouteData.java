@@ -100,7 +100,7 @@ public final class RouteData {
                     if (route.getFromLandmark() != null && route.getToLandmark() != null)
                         break;
                 }
-                route.setPath(building.getRoute(route.getFromLandmark(), route.getToLandmark()));
+                //route.setPath(building.getRoute(route.getFromLandmark(), route.getToLandmark()));
                 break;
             }
         }

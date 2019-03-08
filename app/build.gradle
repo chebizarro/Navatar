@@ -92,9 +92,7 @@ dependencies {
     implementation project(':sensingservices')
 
     //implementation 'com.google.zxing:core:3.3.2'
-
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
-    implementation 'com.google.protobuf:protobuf-lite:3.0.1'
 
     // App's dependencies, including test
     implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"

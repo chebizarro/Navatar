@@ -1,41 +1,51 @@
 apply plugin: 'java-library'
 apply plugin: 'com.google.protobuf'
 
+def reactiveGrpcVersion = '0.9.0'
+def grpcVersion = '1.12.0'
+
 sourceSets {
     main.java.srcDirs += "${protobuf.generatedFilesBaseDir}/main/javalite"
+    main.java.srcDirs += "${protobuf.generatedFilesBaseDir}/main/grpc"
+    main.java.srcDirs += "${protobuf.generatedFilesBaseDir}/main/rxgrpc"
 
     main.proto.srcDirs += "src/main/protobuf"
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.google.protobuf:protobuf-lite:3.0.1'
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+    implementation "io.grpc:grpc-protobuf-lite:${grpcVersion}"
+    implementation "com.salesforce.servicelibs:rxgrpc-stub:${reactiveGrpcVersion}"
 }
 
 protobuf {
     protoc {
-        // You still need protoc like in the non-Android case
-        artifact = 'com.google.protobuf:protoc:3.0.0'
+        artifact = 'com.google.protobuf:protoc:3.6.1'
     }
     plugins {
         javalite {
-            // The codegen for lite comes as a separate artifact
             artifact = 'com.google.protobuf:protoc-gen-javalite:3.0.0'
         }
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
+        rxgrpc {
+            artifact = "com.salesforce.servicelibs:rxgrpc:${reactiveGrpcVersion}:jdk8@jar"
+        }
+        sourceSet
     }
     generateProtoTasks {
         all().each { task ->
             task.builtins {
-                // In most cases you don't need the full Java output
-                // if you use the lite output.
                 remove java
             }
             task.plugins {
-                javalite {
-                    option 'optional_field_style=accessors'
-                    option 'parcelable_messages=true'
-
+                javalite {}
+                grpc {
+                    option 'lite'
                 }
+                rxgrpc {}
             }
         }
     }

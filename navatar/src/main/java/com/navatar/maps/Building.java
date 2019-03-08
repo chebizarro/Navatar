@@ -13,6 +13,7 @@ import com.navatar.pathplanning.Path;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +43,10 @@ public class Building {
      */
     private Map mMap;
 
+
+    public Building(InputStream strem) throws IOException {
+        this(BuildingMapProto.BuildingMap.parseFrom(strem));
+    }
 
     public Building(BuildingMapProto.BuildingMap map) {
         this.protoMap = map;

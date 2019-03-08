@@ -9,6 +9,7 @@ import com.navatar.data.source.MapsRepository;
 import com.navatar.data.source.RoutesRepository;
 import com.navatar.location.GeofencingProvider;
 import com.navatar.location.LocationInteractor;
+import com.navatar.location.LocationProvider;
 import com.navatar.location.model.Location;
 import com.navatar.maps.Route;
 import com.navatar.maps.particles.ParticleState;
@@ -20,6 +21,7 @@ import com.navatar.pathplanning.Path;
 import com.navatar.pathplanning.PathFinder;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -32,6 +34,7 @@ import io.reactivex.subjects.PublishSubject;
  *
  * @author Chris Daley
  */
+@Singleton
 public class AndroidNavigationProvider implements NavigationProvider {
 
     private static final int METERS_FROM_PATH = 5;
@@ -52,7 +55,7 @@ public class AndroidNavigationProvider implements NavigationProvider {
     GeofencingProvider mGeofencingProvider;
 
     @Inject
-    LocationInteractor mLocationInteractor;
+    LocationProvider mLocationInteractor;
 
     @Inject
     SensorDataProvider mSensorDataProvider;

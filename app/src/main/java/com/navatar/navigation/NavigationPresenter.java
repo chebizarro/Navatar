@@ -36,7 +36,6 @@ public final class NavigationPresenter implements NavigationContract.Presenter {
     @Inject
     LandmarkProvider mLandmarkProvider;
 
-
     @Inject
     NavigationProvider mNavigationProvider;
 
@@ -142,6 +141,7 @@ public final class NavigationPresenter implements NavigationContract.Presenter {
     }
 
     private void setupLandmarkProvider() {
+
         disposables.add(mLandmarkProvider
             .getLandmarks()
             .subscribe(l -> {

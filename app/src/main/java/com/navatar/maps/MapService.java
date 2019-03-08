@@ -1,12 +1,5 @@
 package com.navatar.maps;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
-import com.navatar.maps.particles.ParticleState;
-import java.io.InputStream;
-import com.navatar.protobufs.BuildingMapProto;
-
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -14,174 +7,183 @@ import android.os.Binder;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
+
+import com.navatar.maps.particles.ParticleState;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 
 /**
  * @author Chris Daley
  */
 public class MapService extends Service {
-  private String navatarPath = Environment.getExternalStorageDirectory().getPath() + "/Navatar";
-  private String campusName;
-  private final IBinder binder = new MapBinder();
-  private ArrayList<Building> maps;
-  private Building activeMap;
-  private PendingIntent pendingIntent;
+    private String navatarPath = Environment.getExternalStorageDirectory().getPath() + "/Navatar";
+    private String campusName;
+    private final IBinder binder = new MapBinder();
+    private ArrayList<Building> maps;
+    private Building activeMap;
+    private PendingIntent pendingIntent;
 
-  // Auto-locate
-  private String BUILDING_GEOFENCES_JSON_FILENAME = "Building_Geofences.json";
-  private JSONArray buildingGeofences;
+    // Auto-locate
+    private String BUILDING_GEOFENCES_JSON_FILENAME = "Building_Geofences.json";
+    private JSONArray buildingGeofences;
 
-  @Override
-  public void onCreate() {
-      maps = new ArrayList<>();
-  }
-
-  private void loadBuildingGeofencesJSONFromPath() {
-    String json = null;
-    try {
-      InputStream is = this.getAssets().open(navatarPath + '/' + BUILDING_GEOFENCES_JSON_FILENAME);
-      int size = is.available();
-      byte[] buffer = new byte[size];
-      is.read(buffer);
-      is.close();
-      json = new String(buffer, "UTF-8");
-
-      try {
-        JSONObject obj = new JSONObject(json);
-        buildingGeofences = obj.getJSONArray("buildings");
-      } catch (JSONException e) {
-        e.printStackTrace();
-      }
-    } catch (IOException ex) {
-      ex.printStackTrace();
-    }
-  }
-
-  public void loadMapsFromPath(){
-      try {
-
-          String[] mapFiles = getAssets().list(navatarPath);
-          maps.clear();
-
-          for (int i = 0; i<mapFiles.length; i++) {
-            // Ignore building geofences file
-            if ( !mapFiles[i].equals(BUILDING_GEOFENCES_JSON_FILENAME)) {
-              maps.add(new Building(BuildingMapProto.BuildingMap.parseFrom(
-                      getAssets().open(navatarPath + "/" + mapFiles[i]))));
-            }
-          }
-      } catch (IOException e) {
-          e.printStackTrace();
-      }
-
-  }
     @Override
-  public int onStartCommand(Intent intent, int flags, int startId) {
+    public void onCreate() {
+        maps = new ArrayList<>();
+    }
 
-    if(intent!=null){
-        if(intent.hasExtra("path")){
-            campusName = intent.getStringExtra("path");
-            navatarPath = "maps/"+intent.getStringExtra("path");
-            pendingIntent = intent.getParcelableExtra("pendingIntent");
-
-            loadMapsFromPath();
-
-            loadBuildingGeofencesJSONFromPath();
+    private void loadBuildingGeofencesJSONFromPath() {
+        String json = null;
+        try {
+            InputStream is = this.getAssets().open(navatarPath + '/' + BUILDING_GEOFENCES_JSON_FILENAME);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
 
             try {
-                Intent mapListSendbackIntent = new Intent();
-                ArrayList<String> mapList = new ArrayList<>();
-                for (Building map : maps) {
-                    mapList.add(map.getName().replaceAll("_"," "));
-                }
-
-                // Send maps and locations back
-                mapListSendbackIntent.putExtra("maps",mapList);
-
-                // buildingGeofences will be null if they don't exist for failed to load
-                if(buildingGeofences != null) {
-                  mapListSendbackIntent.putExtra("geofences", buildingGeofences.toString());
-                }
-
-                pendingIntent.send(this,100,mapListSendbackIntent);
-
-            } catch (PendingIntent.CanceledException e) {
+                JSONObject obj = new JSONObject(json);
+                buildingGeofences = obj.getJSONArray("buildings");
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
-
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
-    return START_STICKY;
-  }
 
-  @Override
-  public IBinder onBind(Intent arg0) {
+    public void loadMapsFromPath() {
+        try {
+
+            String[] mapFiles = getAssets().list(navatarPath);
+            maps.clear();
+
+            for (int i = 0; i < mapFiles.length; i++) {
+                // Ignore building geofences file
+                if (!mapFiles[i].equals(BUILDING_GEOFENCES_JSON_FILENAME)) {
+                    Building bldg = new Building(getAssets().open(navatarPath + "/" + mapFiles[i]));
+                    maps.add(bldg);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        if (intent != null) {
+            if (intent.hasExtra("path")) {
+                campusName = intent.getStringExtra("path");
+                navatarPath = "maps/" + intent.getStringExtra("path");
+                pendingIntent = intent.getParcelableExtra("pendingIntent");
+
+                loadMapsFromPath();
+
+                loadBuildingGeofencesJSONFromPath();
+
+                try {
+                    Intent mapListSendbackIntent = new Intent();
+                    ArrayList<String> mapList = new ArrayList<>();
+                    for (Building map : maps) {
+                        mapList.add(map.getName().replaceAll("_", " "));
+                    }
+
+                    // Send maps and locations back
+                    mapListSendbackIntent.putExtra("maps", mapList);
+
+                    // buildingGeofences will be null if they don't exist for failed to load
+                    if (buildingGeofences != null) {
+                        mapListSendbackIntent.putExtra("geofences", buildingGeofences.toString());
+                    }
+
+                    pendingIntent.send(this, 100, mapListSendbackIntent);
+
+                } catch (PendingIntent.CanceledException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        return START_STICKY;
+    }
+
+    @Override
+    public IBinder onBind(Intent arg0) {
 
         return binder;
-  }
-
-  public class MapBinder extends Binder {
-    public MapService getService() {
-      return MapService.this;
     }
-  }
 
-  @Override
-  public void onDestroy(){
-
-  }
-  public ArrayList<Building> maps() {
-    return maps;
-  }
-
-  public void setActiveMap(int position) {
-    activeMap = maps.get(position);
-  }
-
-  public Building getActiveMap() {
-    return activeMap;
-  }
-
-  public void setActiveMap(String room) {
-    this.activeMap = findMapFromRoom(room);
-  }
-
-  public void setActiveMapByName(String buildingName) {
-    this.activeMap = findMapByName(buildingName);
-  }
-
-  public String getCampusName() {
-    return campusName;
-  }
-
-  public void debugMapNames() {
-    for (Building map : maps) {
-        Log.d("MAP NAME:", map.getName());
-    }
-  }
-
-  public ParticleState roomLocation(String room) {
-    return activeMap.getRoomLocation(room);
-  }
-
-  private Building findMapFromRoom(String room) {
-    for (Building map : maps) {
-      if (map.getRoomLocation(room) != null)
-        return map;
-    }
-    return null;
-  }
-
-  private Building findMapByName(String buildingName) {
-    for (Building map : maps) {
-        if (map.getName().equals(buildingName)){
-            Log.d("ACTIVE MAP FOUND BY NAME : ", map.getName());
-            return map;
+    public class MapBinder extends Binder {
+        public MapService getService() {
+            return MapService.this;
         }
     }
 
-    return null;
-  }
+    @Override
+    public void onDestroy() {
+
+    }
+
+    public ArrayList<Building> maps() {
+        return maps;
+    }
+
+    public void setActiveMap(int position) {
+        activeMap = maps.get(position);
+    }
+
+    public Building getActiveMap() {
+        return activeMap;
+    }
+
+    public void setActiveMap(String room) {
+        this.activeMap = findMapFromRoom(room);
+    }
+
+    public void setActiveMapByName(String buildingName) {
+        this.activeMap = findMapByName(buildingName);
+    }
+
+    public String getCampusName() {
+        return campusName;
+    }
+
+    public void debugMapNames() {
+        for (Building map : maps) {
+            Log.d("MAP NAME:", map.getName());
+        }
+    }
+
+    public ParticleState roomLocation(String room) {
+        return activeMap.getRoomLocation(room);
+    }
+
+    private Building findMapFromRoom(String room) {
+        for (Building map : maps) {
+            if (map.getRoomLocation(room) != null)
+                return map;
+        }
+        return null;
+    }
+
+    private Building findMapByName(String buildingName) {
+        for (Building map : maps) {
+            if (map.getName().equals(buildingName)) {
+                Log.d("ACTIVE MAP FOUND BY NAME : ", map.getName());
+                return map;
+            }
+        }
+
+        return null;
+    }
 }

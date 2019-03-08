@@ -24,7 +24,8 @@ public class RouteTypeConverter {
 
     @TypeConverter
     public static Building toBuilding(String id) {
-        return new Building(null);
+        return null;
+        //return new Building(null);
     }
 
     @TypeConverter

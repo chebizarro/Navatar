@@ -6,6 +6,7 @@ import com.navatar.data.source.MapsRepository;
 import com.navatar.data.source.MapsRepositoryModule;
 import com.navatar.data.source.RoutesRepository;
 import com.navatar.data.source.RoutesRepositoryModule;
+import com.navatar.pathplanning.PathFinder;
 import com.navatar.util.schedulers.SchedulerModule;
 
 import dagger.BindsInstance;

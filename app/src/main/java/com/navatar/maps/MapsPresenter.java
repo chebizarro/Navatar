@@ -60,12 +60,7 @@ public class MapsPresenter implements MapsContract.Presenter {
                 throwable -> Log.e(TAG, "An error occurred map provider stream", throwable)
             ));
 
-        disposables.add(mLandmarkProvider.getLandmarks()
-            .subscribe(
-                landmark -> {
-                    mRoute.setFromLandmark(landmark);
-                }
-            ));
+
     }
 
     @Override

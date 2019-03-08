@@ -14,6 +14,9 @@ import com.navatar.location.details.AndroidLocationProvider;
 import com.navatar.location.details.QRCodeScanner;
 import com.navatar.navigation.NavigationProvider;
 import com.navatar.navigation.details.AndroidNavigationProvider;
+import com.navatar.pathplanning.AStar;
+import com.navatar.pathplanning.PathFinder;
+import com.navatar.routes.details.AStarPathFinder;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -28,8 +31,8 @@ import dagger.multibindings.ElementsIntoSet;
  * This is a Dagger module. We use this to bind our Application class as a Context in the AppComponent
  * By using Dagger Android we do not need to pass our Application instance to any module,
  * we simply need to expose our Application as Context.
- * One of the advantages of Dagger.Android is that your
- * Application & Activities are provided into your graph for you.
+ * One of the advantages of Dagger.Android is that your Application & Activities are provided
+ * into your graph for you.
  * {@link AppComponent}.
  *
  * @author Chris Daley
@@ -54,6 +57,9 @@ public abstract class ApplicationModule {
 
     @Binds
     abstract LandmarkProvider provideLandmarkProvider(QRCodeScanner qrs);
+
+    @Binds
+    abstract PathFinder providePathFinder(AStarPathFinder aStar);
 
     @Binds
     abstract NavigationProvider provideNavigationProvider(AndroidNavigationProvider androidNavigationProvider);

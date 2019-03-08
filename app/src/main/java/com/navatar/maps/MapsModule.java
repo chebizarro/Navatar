@@ -2,6 +2,8 @@ package com.navatar.maps;
 
 import com.navatar.di.ActivityScoped;
 import com.navatar.di.FragmentScoped;
+import com.navatar.pathplanning.AStar;
+import com.navatar.pathplanning.PathFinder;
 
 import dagger.Binds;
 import dagger.Module;
