@@ -166,6 +166,6 @@ dependencies {
     androidTestImplementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
     androidTestImplementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
     androidTestImplementation "com.android.support:design:$rootProject.supportLibraryVersion"
-    androidTestImplementation 'com.google.code.findbugs:jsr305:3.0.1'
+    androidTestImplementation 'com.google.code.findbugs:jsr305:3.0.2'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
 }
