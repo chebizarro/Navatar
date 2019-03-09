@@ -1,0 +1,11 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':protobufs')
+    implementation project(':navatar')
+    implementation "io.grpc:grpc-stub:$rootProject.grpcVersion"
+    implementation "io.grpc:grpc-protobuf-lite:$rootProject.grpcVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
+}
