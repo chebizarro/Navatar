@@ -7,5 +7,6 @@ dependencies {
     implementation "io.grpc:grpc-stub:$rootProject.grpcVersion"
     implementation "io.grpc:grpc-protobuf-lite:$rootProject.grpcVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
-    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'com.google.protobuf:protobuf-java-util:3.6.1'
 }

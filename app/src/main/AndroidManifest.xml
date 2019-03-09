@@ -16,7 +16,6 @@
         android:allowBackup="false"
         android:icon="@drawable/app_icon"
         android:label="@string/appName"
-        tools:replace="android:icon"
         android:name=".ReferencePointApplication">
 
         <activity
