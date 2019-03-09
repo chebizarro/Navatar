@@ -12,14 +12,14 @@ import com.navatar.math.Distance;
 import com.navatar.protobufs.LandmarkProto.Landmark;
 import com.navatar.protobufs.LandmarkProto.Landmark.LandmarkType;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Vector;
 
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import io.reactivex.subjects.PublishSubject;
 
 public class ParticleFilter {
     private static final int NUM_OF_PARTICLE_FILTERS = 10;
@@ -31,22 +31,26 @@ public class ParticleFilter {
     private static final double KMEANS_MAX_DIAMETER = 10.0;
     private static final double LANDMARK_RADIUS = 5.0;
 
-    private int run;
     private float staticStepV = 0.1f;
-
-    private LinkedList<Transition> transitions = new LinkedList<>();
-    private Particle[][] particles = new Particle[NUM_OF_PARTICLE_FILTERS][NUM_OF_PARTICLES_PER_PF];
-    private Building map;
-    private static Random sRandom = new Random();
-    private float[] stepM = new float[NUM_OF_PARTICLE_FILTERS];
-
-    private ParticleState locationEstimation;
-    private double[][] pfEllipses = new double[NUM_OF_PARTICLE_FILTERS][5];
-
-    private DecimalFormat twoDForm = new DecimalFormat("#0.00000");
-
     private float stepMean = 1.0f;
     private float stepMeanDiff = 0.0933f;
+
+    private int run;
+
+    private float[] stepM = new float[NUM_OF_PARTICLE_FILTERS];
+    private Particle[][] particles = new Particle[NUM_OF_PARTICLE_FILTERS][NUM_OF_PARTICLES_PER_PF];
+    private double[][] pfEllipses = new double[NUM_OF_PARTICLE_FILTERS][5];
+
+    private LinkedList<Transition> transitions = new LinkedList<>();
+
+    private static Random sRandom = new Random();
+    private ParticleState locationEstimation;
+
+
+    private Building map;
+
+
+    private PublishSubject<FilterStep> mFilterSteps = PublishSubject.create();
 
     public ParticleFilter(Map map, ParticleState startingState) {
 
@@ -106,7 +110,6 @@ public class ParticleFilter {
         Transition currTransition, integratedTransition;
         ParticleState newState;
         long currTime;
-        int i;
         LandmarkType currentLandmark;
 
         synchronized (particles) {
@@ -127,7 +130,7 @@ public class ParticleFilter {
 
                 integratedTransition = integrateTransitions(currTransitions);
 
-                for (i = 0; i < NUM_OF_PARTICLE_FILTERS; ++i) {
+                for (int i = 0; i < NUM_OF_PARTICLE_FILTERS; ++i) {
                     for (Particle particle : particles[i]) {
                         newState = transitionModel(particle, integratedTransition, stepM[i]);
                         if (map.pathBlocked(particle.getLastState(), newState))
@@ -141,38 +144,56 @@ public class ParticleFilter {
                 currTransitions.clear();
                 sampling(currentLandmark);
 
-                //locationEstimation = kmeans.greatestCluster(particles);
+                locationEstimation = getLocationEstimate();
 
-                /*
-                if (printData) {
-                    xml.append(" <step time=\"" + currTime + "\">\n");
-                    for (i = 0; i < NUM_OF_PARTICLE_FILTERS; ++i) {
-                        xml.append("  <pf step=\"" + twoDForm.format(stepM[i]) + "\" >\n");
-                        for (Particle particle : particles[i])
-                            xml.append("   <particle row=\"" + twoDForm.format(particle.getLastState().getY())
-                                    + "\" col=\"" + twoDForm.format(particle.getLastState().getX()) + "\" />\n");
-                        xml.append("  </pf>\n");
-                    }
+                FilterStep filterStep = new FilterStep(currTime, locationEstimation.getX(), locationEstimation.getY());
 
-                    xml.append("\t</step>\n");
-                    xml.writeFile(true);
-                } else if (printEstimation) {
-                    pfEllipses = getPFLocations();
-                    xml.append(" <step time=\"" + currTime + "\" meanX=\"" + locationEstimation.getX()
-                            + "\" meanY=\"" + locationEstimation.getY() + "\" >\n");
-                    for (i = 0; i < NUM_OF_PARTICLE_FILTERS; ++i)
-                        xml.append("  <pf step=\"" + twoDForm.format(stepM[i]) + "\" meanX=\""
-                                + twoDForm.format(pfEllipses[i][0]) + "\" meanY=\""
-                                + twoDForm.format(pfEllipses[i][1]) + "\" covX=\""
-                                + twoDForm.format(pfEllipses[i][2]) + "\" covXY=\""
-                                + twoDForm.format(pfEllipses[i][3]) + "\" covY=\""
-                                + twoDForm.format(pfEllipses[i][4]) + "\" />\n");
-                    xml.append(" </step>\n");
-                    xml.writeFile(true);
+                double[][] pfs = getPFLocations();
+
+                for (int i = 0; i < NUM_OF_PARTICLE_FILTERS; ++i) {
+                    filterStep.addFilter(stepM[i], pfs[i]);
                 }
-                */
+
+                mFilterSteps.onNext(filterStep);
             }
         }
+    }
+
+    private double[][] getPFLocations() {
+        int i, j;
+        ParticleState currState;
+        double varX, varY;
+        double[][] values = new double[NUM_OF_PARTICLE_FILTERS][5];
+
+        for (i = 0; i < NUM_OF_PARTICLE_FILTERS; ++i) {
+
+            // Calculate mean
+            for (j = 0; j < NUM_OF_PARTICLES_PER_PF; ++j) {
+                currState = particles[i][j].getLastState();
+                values[i][0] += currState.getX();
+                values[i][1] += currState.getY();
+            }
+
+            values[i][0] /= NUM_OF_PARTICLES_PER_PF;
+            values[i][1] /= NUM_OF_PARTICLES_PER_PF;
+
+            // Calculate covariance matrix
+            for (j = 0; j < NUM_OF_PARTICLES_PER_PF; ++j) {
+                currState = particles[i][j].getLastState();
+                varX = currState.getX() - values[i][0];
+                varY = currState.getY() - values[i][1];
+
+                values[i][2] += varX * varX;
+                values[i][3] += varX * varY;
+                values[i][4] += varY * varY;
+            }
+
+            values[i][2] /= NUM_OF_PARTICLES_PER_PF;
+            values[i][3] /= NUM_OF_PARTICLES_PER_PF;
+            values[i][4] /= NUM_OF_PARTICLES_PER_PF;
+        }
+
+        return values;
     }
 
     private ParticleState transitionModel(Particle particle, Transition integratedTransition,
@@ -354,57 +375,10 @@ public class ParticleFilter {
 
     }
 
-    private double[][] getPFLocations() {
-
-        int i, j;
-        ParticleState currState;
-        double varX, varY;
-        double[][] values = new double[NUM_OF_PARTICLE_FILTERS][5];
-
-        for (i = 0; i < NUM_OF_PARTICLE_FILTERS; ++i) {
-
-            // Calculate mean
-            for (j = 0; j < NUM_OF_PARTICLES_PER_PF; ++j) {
-                currState = particles[i][j].getLastState();
-                values[i][0] += currState.getX();
-                values[i][1] += currState.getY();
-            }
-
-            values[i][0] /= NUM_OF_PARTICLES_PER_PF;
-            values[i][1] /= NUM_OF_PARTICLES_PER_PF;
-
-            // Calculate covariance matrix
-            for (j = 0; j < NUM_OF_PARTICLES_PER_PF; ++j) {
-                currState = particles[i][j].getLastState();
-                varX = currState.getX() - values[i][0];
-                varY = currState.getY() - values[i][1];
-
-                values[i][2] += varX * varX;
-                values[i][3] += varX * varY;
-                values[i][4] += varY * varY;
-            }
-
-            values[i][2] /= NUM_OF_PARTICLES_PER_PF;
-            values[i][3] /= NUM_OF_PARTICLES_PER_PF;
-            values[i][4] /= NUM_OF_PARTICLES_PER_PF;
-        }
-
-        return values;
-    }
 
     public ParticleState getSynchronizedLocationEstimate() {
         synchronized (particles) {
-            KMeans<ParticleState> kmeans =
-                    new KMeans<>(NUM_OF_CLUSTERS, KMEANS_CONVERGENCE, KMEANS_MAX_DIAMETER);
-            Vector<ParticleState> states = new Vector<>();
-            for (Particle[] particleFilter : particles) {
-                for (Particle particle : particleFilter)
-                    states.add(particle.getLastState());
-            }
-            Vector<Cluster<ParticleState>> clusters = kmeans.calculateClusters(states);
-            Cluster<ParticleState> largestCluster = Collections.max(clusters);
-            locationEstimation = largestCluster.getMean();
-            locationEstimation.setDirection(calculateAngle(largestCluster.states()));
+            locationEstimation = getLocationEstimate();
         }
         return locationEstimation;
     }
@@ -435,6 +409,21 @@ public class ParticleFilter {
         }
     }
 
+    private ParticleState getLocationEstimate() {
+        KMeans<ParticleState> kmeans =
+                new KMeans<>(NUM_OF_CLUSTERS, KMEANS_CONVERGENCE, KMEANS_MAX_DIAMETER);
+        Vector<ParticleState> states = new Vector<>();
+        for (Particle[] particleFilter : particles) {
+            for (Particle particle : particleFilter)
+                states.add(particle.getLastState());
+        }
+        Vector<Cluster<ParticleState>> clusters = kmeans.calculateClusters(states);
+        Cluster<ParticleState> largestCluster = Collections.max(clusters);
+        ParticleState estimation = largestCluster.getMean();
+        estimation.setDirection(calculateAngle(largestCluster.states()));
+        return estimation;
+    }
+
     public ParticleState getLocation() {
         return getSynchronizedLocationEstimate();
     }
@@ -450,5 +439,9 @@ public class ParticleFilter {
 
     public Flowable<ParticleState> onStateChange() {
         return null;
+    }
+
+    public Flowable<FilterStep> filterSteps() {
+        return mFilterSteps.toFlowable(BackpressureStrategy.LATEST);
     }
 }

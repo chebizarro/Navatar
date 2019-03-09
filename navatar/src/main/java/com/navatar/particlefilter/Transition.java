@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.navatar.particlefilter;
 
 import com.navatar.protobufs.LandmarkProto.Landmark.LandmarkType;
@@ -10,18 +7,13 @@ import com.navatar.protobufs.LandmarkProto.Landmark.LandmarkType;
  */
 public class Transition {
     private LandmarkType landmarkType;
-    private int direction;
-    private double dirV;
-    private long time;
-    private boolean left;
-    private int step;
+    private int direction = 0;
+    private double dirV = 0;
+    private long time = 0;
+    private boolean left = false;
+    private int step = 0;
 
-    public Transition() {
-        this.direction = 0;
-        this.step = 0;
-        this.time = 0;
-        this.dirV = 0;
-        this.left = false;
+    Transition() {
     }
 
     public Transition(int direction, int step, long time, double dirV, LandmarkType type,
