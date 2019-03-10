@@ -36,7 +36,7 @@ public class RoutesFragment extends DaggerFragment implements RoutesContract.Vie
         }
 
         private void setList(List<RouteData> routes) {
-            mRoutes = checkNotNull(routes);
+            mRoutes = routes;
         }
 
         @Override

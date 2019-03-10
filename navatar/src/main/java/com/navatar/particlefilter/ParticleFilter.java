@@ -46,11 +46,11 @@ public class ParticleFilter {
     private static Random sRandom = new Random();
     private ParticleState locationEstimation;
 
-
     private Building map;
 
-
     private PublishSubject<FilterStep> mFilterSteps = PublishSubject.create();
+
+    private PublishSubject<ParticleState> mCurrentState = PublishSubject.create();
 
     public ParticleFilter(Map map, ParticleState startingState) {
 
@@ -421,6 +421,9 @@ public class ParticleFilter {
         Cluster<ParticleState> largestCluster = Collections.max(clusters);
         ParticleState estimation = largestCluster.getMean();
         estimation.setDirection(calculateAngle(largestCluster.states()));
+
+        mCurrentState.onNext(estimation);
+
         return estimation;
     }
 

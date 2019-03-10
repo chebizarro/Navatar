@@ -61,8 +61,8 @@ public abstract class ApplicationModule {
     @Binds
     abstract PathFinder providePathFinder(AStarPathFinder aStar);
 
-    @Binds
-    abstract NavigationProvider provideNavigationProvider(AndroidNavigationProvider androidNavigationProvider);
+    //@Binds
+    //abstract NavigationProvider provideNavigationProvider(AndroidNavigationProvider androidNavigationProvider);
 
     @Provides
     @ElementsIntoSet

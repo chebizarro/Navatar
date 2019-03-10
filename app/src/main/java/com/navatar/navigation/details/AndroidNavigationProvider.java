@@ -49,19 +49,10 @@ public class AndroidNavigationProvider implements NavigationProvider {
     MapsRepository mMapRepository;
 
     @Inject
-    RoutesRepository mRoutesRepository;
-
-    @Inject
-    GeofencingProvider mGeofencingProvider;
-
-    @Inject
     LocationProvider mLocationInteractor;
 
     @Inject
     SensorDataProvider mSensorDataProvider;
-
-    @Inject
-    LandmarkProvider mLandmarkProvider;
 
     private final PublishSubject<SensorData> sensorDataPublishSubject = PublishSubject.create();
 
@@ -77,11 +68,11 @@ public class AndroidNavigationProvider implements NavigationProvider {
     @Inject
     public AndroidNavigationProvider() {}
 
-    private void startNavigation() {
+    private void startNavigation(Route route) {
 
-        Route route = mRoutesRepository.getSelectedRoute();
+        mCurrentRoute = route;
 
-        ParticleState startState = route.getPath().getStep(0).getParticleState();
+        ParticleState startState = mCurrentRoute.getPath().getStep(0).getParticleState();
 
         mFilter = new ParticleFilter(mMapRepository.getSelectedMap(), startState);
 
@@ -150,6 +141,10 @@ public class AndroidNavigationProvider implements NavigationProvider {
                 }));
 
         }
+    }
+
+    private void endNavigation() {
+        disposables.dispose();
     }
 
     @Override

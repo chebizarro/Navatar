@@ -1,7 +1,7 @@
 package com.navatar.telemetry;
 
-import com.referencepoint.proto.ParticleCastProto;
-import com.referencepoint.proto.RxParticleCastGrpc;
+import com.referencepoint.telemetry.proto.RxTelemetryGrpc;
+import com.referencepoint.telemetry.proto.TelemetryOuterClass;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -12,14 +12,14 @@ public class Telemetry {
 
     private ManagedChannel mChannel;
 
-    private RxParticleCastGrpc.RxParticleCastStub mStub;
+    private RxTelemetryGrpc.RxTelemetryStub mStub;
 
     public Telemetry() {
     }
 
     public Telemetry connect(String address, int port) {
         mChannel = ManagedChannelBuilder.forAddress(address, port).usePlaintext().build();
-        mStub = RxParticleCastGrpc.newRxStub(mChannel);
+        mStub = RxTelemetryGrpc.newRxStub(mChannel);
         return this;
     }
 
@@ -28,8 +28,8 @@ public class Telemetry {
         mChannel.shutdown();
     }
 
-    public Single<ParticleCastProto.CastSummary> castTelemetry(Flowable<ParticleCastProto.ParticleState> telemetry) {
-        return mStub.castParticleState(telemetry);
+    public Single<TelemetryOuterClass.TelemetrySummary> castTelemetry(Flowable<TelemetryOuterClass.TelemetryData> telemetry) {
+        return mStub.recordData(telemetry);
     }
 
 }

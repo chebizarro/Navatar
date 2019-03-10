@@ -22,6 +22,9 @@ import java.util.ArrayList;
  * @author Chris Daley
  */
 public class MapService extends Service {
+
+    private static final String TAG = MapService.class.getSimpleName();
+
     private String navatarPath = Environment.getExternalStorageDirectory().getPath() + "/Navatar";
     private String campusName;
     private final IBinder binder = new MapBinder();
@@ -179,7 +182,7 @@ public class MapService extends Service {
     private Building findMapByName(String buildingName) {
         for (Building map : maps) {
             if (map.getName().equals(buildingName)) {
-                Log.d("ACTIVE MAP FOUND BY NAME : ", map.getName());
+                Log.d(TAG, map.getName());
                 return map;
             }
         }

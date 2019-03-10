@@ -6,6 +6,8 @@ import com.navatar.data.source.MapsRepository;
 import com.navatar.data.source.MapsRepositoryModule;
 import com.navatar.data.source.RoutesRepository;
 import com.navatar.data.source.RoutesRepositoryModule;
+import com.navatar.navigation.NavigationProvider;
+import com.navatar.navigation.NavigationProviderModule;
 import com.navatar.pathplanning.PathFinder;
 import com.navatar.util.schedulers.SchedulerModule;
 
@@ -33,6 +35,7 @@ import javax.inject.Singleton;
         SchedulerModule.class,
         RoutesRepositoryModule.class,
         MapsRepositoryModule.class,
+        NavigationProviderModule.class,
         ApplicationModule.class,
         ActivityBindingModule.class,
         AndroidSupportInjectionModule.class})
@@ -41,6 +44,8 @@ public interface AppComponent extends AndroidInjector<ReferencePointApplication>
     MapsRepository getMapsRepository();
 
     RoutesRepository getNavHistoryRepository();
+
+    NavigationProvider getNavigationProvider();
 
     // Gives us syntactic sugar. we can then do DaggerAppComponent.builder().application(this).build().inject(this);
     // never having to instantiate any modules or say which module we are passing the application to.

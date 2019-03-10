@@ -32,7 +32,6 @@ android {
     }
 
     flavorDimensions "default"
-
     // If you need to add more flavors, consider using flavor dimensions.
     productFlavors {
         mock {
@@ -42,12 +41,15 @@ android {
         prod {
             dimension "default"
         }
+        telemetry {
+            dimension "default"
+        }
     }
 
-    // Remove mockRelease as it's not needed.
+    // Remove mockRelease and telemetryRelease as they're not needed.
     android.variantFilter { variant ->
         if (variant.buildType.name == 'release'
-                && variant.getFlavors().get(0).name == 'mock') {
+                && variant.getFlavors().get(0).name in ['mock', 'telemetry'] ) {
             variant.setIgnore(true)
         }
     }
@@ -73,6 +75,10 @@ android {
     }
 }
 
+configurations {
+    telemetryDebugCompile
+}
+
 configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
         def requested = details.requested
@@ -90,6 +96,8 @@ dependencies {
     implementation project(':protobufs')
     implementation project(':navatar')
     implementation project(':sensingservices')
+
+    telemetryDebugCompile project(':telemetry')
 
     //implementation 'com.google.zxing:core:3.3.2'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
