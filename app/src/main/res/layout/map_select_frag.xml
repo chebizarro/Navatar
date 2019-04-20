@@ -66,14 +66,6 @@
 
         </LinearLayout>
 
-
-        <com.journeyapps.barcodescanner.DecoratedBarcodeView
-            android:id="@+id/barcode_scanner"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_below="@id/buttonsLayout"
-            android:layout_alignParentBottom="true"/>
-
     </RelativeLayout>
 
 

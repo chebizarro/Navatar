@@ -61,9 +61,6 @@ public class MapsFragment extends DaggerFragment implements MapsContract.View {
     @BindView(R.id.showNavigationButton)
     Button showNavigationButton;
 
-    @BindView(R.id.barcode_scanner)
-    DecoratedBarcodeView barcodeView;
-
     @BindView(R.id.showStepsListView)
     ListView showStepsListView;
 
@@ -85,9 +82,6 @@ public class MapsFragment extends DaggerFragment implements MapsContract.View {
     MapsContract.Presenter mPresenter;
 
     @Inject
-    QRCodeScanner qrCodeScanner;
-
-    @Inject
     TextToSpeechProvider mTextToSpeechProvider;
 
     @Inject
@@ -105,7 +99,6 @@ public class MapsFragment extends DaggerFragment implements MapsContract.View {
     public void onResume() {
         super.onResume();
         mPresenter.takeView(this);
-        barcodeView.resume();
     }
 
     @Override
@@ -119,7 +112,6 @@ public class MapsFragment extends DaggerFragment implements MapsContract.View {
     public void onPause() {
         super.onPause();
         mPresenter.dropView();
-        barcodeView.pause();
     }
 
     @Nullable
@@ -139,7 +131,6 @@ public class MapsFragment extends DaggerFragment implements MapsContract.View {
             mPresenter.onShowStepsSelected();
         });
 
-        qrCodeScanner.setView(barcodeView, getActivity().getIntent());
         return root;
     }
 
