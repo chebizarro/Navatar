@@ -1,12 +1,16 @@
 package com.navatar.telemetry;
 
+import com.navatar.telemetry.rl.algo.Algorithm;
+
 import java.util.List;
 
 public class Simulation {
 
-    Environment environment;
+    private Environment environment;
 
-    List<Agent> agents;
+    private Algorithm algorithm;
+
+    private List<Agent> agents;
 
     public Simulation(Environment environment, List<Agent> agents) {
         this.environment = environment;
