@@ -1,11 +1,16 @@
 package com.navatar.telemetry.rl.algo;
 
 import com.navatar.telemetry.GridMatrix;
+import com.navatar.telemetry.rl.algo.settings.BasicSettings;
 import com.navatar.telemetry.rl.state.Action;
 import com.navatar.telemetry.rl.state.GridState;
 import com.navatar.telemetry.rl.state.StateType;
 
 public class QLearning extends Algorithm {
+
+    public QLearning(GridMatrix matrix, BasicSettings settings) {
+        super(matrix, settings);
+    }
 
     @Override
     public boolean run() {
@@ -22,6 +27,29 @@ public class QLearning extends Algorithm {
 
         return convergence(oldMatrix, matrix);
     }
+
+    @Override
+    public void runAll() {
+        GridMatrix oldMatrix;
+
+        do {
+            oldMatrix = matrix.copy();
+
+            GridState currentState = matrix.getStartState();
+
+            while (currentState.getType() != StateType.GOAL) {
+
+                Action chosenAction = getEpsilonGreedyAction(currentState);
+
+                chosenAction.setQvalue(calculateNewQvalue(chosenAction.getNextState(), chosenAction));
+
+                currentState = chosenAction.getNextState();
+            }
+        }
+
+        while (!convergence(oldMatrix, matrix));
+    }
+
 
     public double calculateNewQvalue(GridState from,  Action a) {
 

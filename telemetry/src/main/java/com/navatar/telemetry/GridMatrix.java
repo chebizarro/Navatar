@@ -8,6 +8,8 @@ public class GridMatrix {
 
     protected GridState[][] matrix;
 
+
+
     public GridMatrix copy() {
         return new GridMatrix();
     }

@@ -12,9 +12,19 @@ public class Simulation {
 
     private List<Agent> agents;
 
-    public Simulation(Environment environment, List<Agent> agents) {
+
+    public Simulation(Environment environment, Algorithm algorithm, List<Agent> agents) {
         this.environment = environment;
+        this.algorithm = algorithm;
         this.agents = agents;
+    }
+
+    public void run() {
+        algorithm.run();
+    }
+
+    public void runAll() {
+        algorithm.runAll();
     }
 
 }

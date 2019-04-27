@@ -18,6 +18,11 @@ public abstract class Algorithm {
 
     protected BasicSettings settings;
 
+    public Algorithm(GridMatrix matrix, BasicSettings settings) {
+        this.matrix = matrix;
+        this.settings = settings;
+    }
+
     protected boolean convergence(GridMatrix oldM, GridMatrix newM) {
         for (int i = 0; i < oldM.getRows(); i++) {
             for (int j = 0; j < oldM.getColumns(); j++) {
@@ -80,5 +85,7 @@ public abstract class Algorithm {
 
 
     public abstract boolean run();
+
+    public abstract void runAll();
 
 }
