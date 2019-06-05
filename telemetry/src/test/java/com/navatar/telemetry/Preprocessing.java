@@ -70,12 +70,10 @@ public class Preprocessing {
         String filename = args.length == 2 ? args[1] : args[0];
         try {
             output = new FileOutputStream(filename);
+            generateMinimap(generateParticles(map), TILE_SIZE).writeTo(output);
         } catch (FileNotFoundException e) {
             System.err.println("Could not create file: " + filename);
             return;
-        }
-        try {
-            generateMinimap(generateParticles(map), TILE_SIZE).writeTo(output);
         } catch (IOException e) {
             System.err.println("Could not write to map to file: " + filename);
             return;
@@ -236,10 +234,6 @@ public class Preprocessing {
      *          The landmarks to compare for the closest ones.
      * @param type
      *          The type of landmarks to search.
-     * @param x
-     *          The x coordinate of the point.
-     * @param y
-     *          The y coordinate of the point.
      * @return The k closest landmarks to the point (x, y).
      */
     private static Iterable<Integer> findKClosestLandmarks(int k, List<Landmark> landmarks,
