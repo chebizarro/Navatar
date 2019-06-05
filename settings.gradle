@@ -1,1 +1,1 @@
-include ':app', ':protobufs', ':sensingservices', ':navatar', ':telemetry'
+include ':app', ':protobufs', ':sensingservices', ':navatar'

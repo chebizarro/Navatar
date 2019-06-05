@@ -41,9 +41,6 @@ android {
         prod {
             dimension "default"
         }
-        telemetry {
-            dimension "default"
-        }
     }
 
     // Remove mockRelease and telemetryRelease as they're not needed.
@@ -96,8 +93,6 @@ dependencies {
     implementation project(':protobufs')
     implementation project(':navatar')
     implementation project(':sensingservices')
-
-    telemetryDebugCompile project(':telemetry')
 
     //implementation 'com.google.zxing:core:3.3.2'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
